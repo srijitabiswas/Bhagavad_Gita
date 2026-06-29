@@ -1,6 +1,6 @@
 # 🪷 Bhagavad Gita — Immersive Digital Experience
 
-> **A cinematic, interactive, and modern way to experience the timeless wisdom of the Bhagavad Gita.**
+> **An interactive, and modern way to experience the timeless wisdom of the Bhagavad Gita.**
 
 Instead of presenting the Gita as static text, this project transforms it into a visually immersive learning experience through storytelling, motion design, AI assistance, and thoughtful interactions—making its teachings accessible to modern audiences while preserving their depth and reverence.
 
