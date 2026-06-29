@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Guide — Bhagavad Gita</title>
+  <meta name="description" content="Ask any question about the Bhagavad Gita. Your AI companion draws from the actual teachings of Krishna to answer your life questions.">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    .companion-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 32px;
+      align-items: start;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .companion-sidebar {
+      position: sticky;
+      top: calc(var(--nav-height) + 24px);
+    }
+    @media (max-width: 900px) {
+      .companion-layout { grid-template-columns: 1fr; }
+      .companion-sidebar { position: static; display: none; }
+    }
+
+    .chat-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-deep);
+    }
+
+    .chat-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--divider);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--bg-card-hover);
+    }
+
+    .guide-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-glow), rgba(201,168,76,0.1));
+      border: 1px solid var(--border-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    .guide-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--sage);
+    }
+    .guide-status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--sage);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    #chat-messages {
+      height: 520px;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+
+    .chat-footer {
+      border-top: 1px solid var(--divider);
+      padding: 16px 20px;
+      background: var(--bg-card-hover);
+    }
+
+    .topic-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all var(--transition);
+      margin-bottom: 6px;
+    }
+    .topic-btn:hover {
+      color: var(--gold);
+      border-color: var(--border-hover);
+      background: var(--gold-glow);
+    }
+  </style>
+</head>
+<body data-page="companion">
+
+<div class="reading-progress"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="logo-om">ॐ</span><span>Bhagavad Gita</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="story.html">Story</a></li>
+      <li><a href="chapters.html">Chapters</a></li>
+      <li><a href="themes.html">Themes</a></li>
+      <li><a href="wisdom.html">Daily Wisdom</a></li>
+      <li><a href="companion.html" class="active">AI Guide</a></li>
+      <li><a href="search.html">Search</a></li>
+      <li><a href="reflections.html">Reflections</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="chapters.html" class="btn-nav">Read Chapters</a>
+      <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<nav class="mobile-nav">
+  <a href="index.html">Home</a><a href="chapters.html">Chapters</a>
+  <a href="themes.html">Themes</a><a href="wisdom.html">Daily Wisdom</a>
+</nav>
+
+<!-- PAGE HERO -->
+<section style="padding:calc(var(--nav-height) + 56px) 0 48px;position:relative;overflow:hidden;">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-photo" style="background-image:url('assets/images/photos/krishna-teaching-arjuna.jpg');background-position:center 32%;"></div>
+  <div class="container" style="position:relative;z-index:1;text-align:center;">
+    <div class="section-label reveal">Powered by AI</div>
+    <h1 class="reveal" style="margin-bottom:16px;">Your Personal <em>Gita Guide</em></h1>
+    <p class="reveal" style="max-width:500px;margin:0 auto;color:var(--text-secondary);line-height:1.8;">
+      Ask any question. Explore any verse. Find the teaching that speaks to your life right now.
+      The guide draws from the actual text of the Bhagavad Gita.
+    </p>
+  </div>
+</section>
+
+<!-- CHAT INTERFACE -->
+<section class="section" style="position:relative;z-index:1;padding-top:0;">
+  <div class="container">
+    <div class="companion-layout">
+
+      <!-- SIDEBAR -->
+      <aside class="companion-sidebar">
+        <div class="card" style="margin-bottom:16px;">
+          <div class="section-label" style="margin-bottom:12px;">Ask About</div>
+
+          <button class="topic-btn" onclick="askTopic('Explain Karma Yoga simply')">
+            🔄 Karma & Action
+          </button>
+          <button class="topic-btn" onclick="askTopic('How do I deal with anxiety and stress?')">
+            😰 Anxiety & Stress
+          </button>
+          <button class="topic-btn" onclick="askTopic('What does the Gita say about grief and loss?')">
+            😢 Grief & Loss
+          </button>
+          <button class="topic-btn" onclick="askTopic('How to meditate according to the Gita?')">
+            🧘 Meditation
+          </button>
+          <button class="topic-btn" onclick="askTopic('What is my dharma — how do I find my purpose?')">
+            🎯 Life Purpose
+          </button>
+          <button class="topic-btn" onclick="askTopic('What is Bhakti Yoga and the path of devotion?')">
+            🪷 Devotion
+          </button>
+          <button class="topic-btn" onclick="askTopic('Explain the three Gunas — Sattva, Rajas, Tamas')">
+            🌗 The Three Gunas
+          </button>
+          <button class="topic-btn" onclick="askTopic('What does the Gita say about fear?')">
+            😨 Overcoming Fear
+          </button>
+          <button class="topic-btn" onclick="askTopic('Give me a summary of all 18 chapters')">
+            📖 Chapter Summary
+          </button>
+          <button class="topic-btn" onclick="askTopic('What is the meaning of OM / Aum in the Gita?')">
+            ॐ The Meaning of OM
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="section-label" style="margin-bottom:8px;">Verse Lookup</div>
+          <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px;">Type a verse number to explore it:</p>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <button class="topic-btn" onclick="askTopic('Explain verse 2.47')">2.47 — Nishkama Karma</button>
+            <button class="topic-btn" onclick="askTopic('Explain verse 2.20')">2.20 — The Eternal Soul</button>
+            <button class="topic-btn" onclick="askTopic('Explain verse 6.5')">6.5 — Your Own Best Friend</button>
+            <button class="topic-btn" onclick="askTopic('Explain verse 18.66')">18.66 — Surrender</button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CHAT -->
+      <div>
+        <div class="chat-container">
+          <!-- Header -->
+          <div class="chat-header">
+            <div class="guide-avatar">🪷</div>
+            <div>
+              <div style="font-family:var(--font-display);font-size:1.1rem;color:var(--text-primary);margin-bottom:2px;">
+                Gita Wisdom Guide
+              </div>
+              <div class="guide-status">Online · Drawing from the Bhagavad Gita</div>
+            </div>
+            <div style="margin-left:auto;">
+              <button onclick="clearChat()" style="font-size:0.78rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:var(--radius-full);padding:6px 14px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">
+                Clear chat
+              </button>
+            </div>
+          </div>
+
+          <!-- Messages -->
+          <div id="chat-messages" role="log" aria-live="polite" aria-label="Conversation with Gita Guide">
+            <!-- populated by JS -->
+          </div>
+
+          <!-- Suggested questions -->
+          <div style="padding:12px 20px;border-top:1px solid var(--divider);background:var(--bg-card);">
+            <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">Quick Questions</div>
+            <div class="suggested-questions">
+              <button class="suggested-q" data-q="What is the most important teaching of the Gita?">Most important teaching</button>
+              <button class="suggested-q" data-q="Which chapter should I read first?">Where to start</button>
+              <button class="suggested-q" data-q="How does the Gita help with modern anxiety?">Anxiety help</button>
+              <button class="suggested-q" data-q="Explain karma in simple terms">What is karma?</button>
+            </div>
+          </div>
+
+          <!-- Input -->
+          <div class="chat-footer">
+            <div class="chat-input-area" style="border:none;padding:0;background:none;">
+              <input type="text" id="chat-input" class="chat-input"
+                placeholder="Ask about any verse, teaching, or life question…"
+                aria-label="Your question to the Gita Guide"
+                maxlength="400">
+              <button id="chat-send" class="chat-send" aria-label="Send message" title="Send">
+                ➤
+              </button>
+            </div>
+            <div style="margin-top:10px;font-size:0.72rem;color:var(--text-muted);text-align:center;">
+              Responses draw from the Bhagavad Gita's actual teachings. This is an educational tool, not a substitute for personal spiritual guidance.
+            </div>
+          </div>
+        </div>
+
+        <!-- Capabilities -->
+        <div class="grid grid-3" style="gap:12px;margin-top:24px;">
+          <div style="padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);text-align:center;">
+            <div style="font-size:1.3rem;margin-bottom:8px;">📖</div>
+            <div style="font-size:0.82rem;font-weight:700;color:var(--text-primary);margin-bottom:4px;">Verse Explanation</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">Ask about any verse by number, e.g. "Explain 2.47"</div>
+          </div>
+          <div style="padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);text-align:center;">
+            <div style="font-size:1.3rem;margin-bottom:8px;">💙</div>
+            <div style="font-size:0.82rem;font-weight:700;color:var(--text-primary);margin-bottom:4px;">Life Guidance</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">Share what you're going through; receive relevant wisdom</div>
+          </div>
+          <div style="padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);text-align:center;">
+            <div style="font-size:1.3rem;margin-bottom:8px;">🎓</div>
+            <div style="font-size:0.82rem;font-weight:700;color:var(--text-primary);margin-bottom:4px;">Concept Breakdown</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">Ask "What is Dharma?" or "Explain the Gunas"</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<section class="section-sm" style="background:var(--bg-deep);position:relative;z-index:1;">
+  <div class="container">
+    <div style="max-width:700px;margin:0 auto;text-align:center;padding:32px;border:1px solid var(--border);border-radius:var(--radius-xl);">
+      <div style="font-size:1.5rem;margin-bottom:12px;">🙏</div>
+      <h3 style="margin-bottom:12px;font-size:1.2rem;">A Note on Authenticity</h3>
+      <p style="font-size:0.88rem;color:var(--text-muted);line-height:1.8;">
+        This guide draws from the actual text of the Bhagavad Gita and clearly distinguishes between
+        the original scripture and explanatory commentary. For deep personal practice, we recommend
+        also studying with a qualified teacher from your chosen tradition.
+        The Gita belongs to all humanity — engage with it humbly and with an open heart.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" style="position:relative;z-index:1;">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+      <div class="footer-brand">ॐ Bhagavad Gita</div>
+      <nav style="display:flex;gap:24px;flex-wrap:wrap;">
+        <a href="chapters.html" style="font-size:0.85rem;color:var(--text-muted);">All Chapters</a>
+        <a href="themes.html" style="font-size:0.85rem;color:var(--text-muted);">Themes</a>
+        <a href="wisdom.html" style="font-size:0.85rem;color:var(--text-muted);">Daily Wisdom</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/images.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/animations.js"></script>
+<script>
+let companion;
+document.addEventListener('DOMContentLoaded', () => {
+  companion = new GitaCompanion();
+
+  // Wire suggested questions
+  document.querySelectorAll('.suggested-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const q = btn.dataset.q || btn.textContent;
+      if (document.getElementById('chat-input')) {
+        document.getElementById('chat-input').value = q;
+        companion.send();
+      }
+    });
+  });
+});
+
+function askTopic(question) {
+  if (!companion) return;
+  const input = document.getElementById('chat-input');
+  if (input) {
+    input.value = question;
+    companion.send();
+    // Scroll to chat
+    document.getElementById('chat-messages')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+function clearChat() {
+  const box = document.getElementById('chat-messages');
+  if (box) {
+    box.innerHTML = '';
+    if (companion) {
+      companion.messages = [];
+      companion.addMessage('ai', 'Namaste 🙏 The conversation has been cleared. What would you like to explore in the Bhagavad Gita?');
+    }
+  }
+}
+</script>
+<script>
+// Service worker removed — actively unregister any previously installed one and clear old caches
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+}
+if (window.caches && caches.keys) {
+  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+}
+</script>
+</body>
+</html>

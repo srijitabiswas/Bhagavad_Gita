@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Explorer — Bhagavad Gita</title>
+  <meta name="description" content="Explore the Bhagavad Gita by universal themes — Karma, Devotion, Wisdom, Meditation, Peace, Leadership and more.">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    .concept-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .concept-tag:hover, .concept-tag.selected {
+      color: var(--gold);
+      border-color: var(--border-hover);
+      background: var(--gold-glow);
+    }
+  </style>
+</head>
+<body data-page="themes">
+
+<div class="reading-progress"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="logo-om">ॐ</span><span>Bhagavad Gita</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="story.html">Story</a></li>
+      <li><a href="chapters.html">Chapters</a></li>
+      <li><a href="themes.html" class="active">Themes</a></li>
+      <li><a href="wisdom.html">Daily Wisdom</a></li>
+      <li><a href="companion.html">AI Guide</a></li>
+      <li><a href="search.html">Search</a></li>
+      <li><a href="reflections.html">Reflections</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="companion.html" class="btn-nav">Ask AI Guide</a>
+      <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<nav class="mobile-nav">
+  <a href="index.html">Home</a><a href="chapters.html">Chapters</a>
+  <a href="themes.html">Themes</a><a href="companion.html">AI Guide</a>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero" style="position:relative;overflow:hidden;padding-top:calc(var(--nav-height) + 60px);">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-photo" style="background-image:url('assets/images/photos/krishna-cosmic-circle.jpg');background-position:center 40%;"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 60% 50%, rgba(91,61,168,0.08) 0%, transparent 60%);pointer-events:none;"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="section-label reveal">Universal Teachings</div>
+    <h1 class="reveal" style="margin-bottom:16px;">
+      Explore by <em>Theme</em>
+    </h1>
+    <p class="reveal" style="max-width:520px;margin:0 auto 40px;color:var(--text-secondary);font-size:1.05rem;line-height:1.8;">
+      The Gita's wisdom transcends time. Browse by the concepts that matter most to your life right now.
+    </p>
+
+    <!-- Quick nav tags -->
+    <div id="theme-quick-nav" class="reveal" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:700px;margin:0 auto;"></div>
+  </div>
+</section>
+
+<!-- THEMES GRID -->
+<section class="section" style="position:relative;z-index:1;">
+  <div class="container">
+    <div id="theme-grid" class="grid grid-3"></div>
+  </div>
+</section>
+
+<!-- FEATURED THEME DEEP-DIVE: Karma -->
+<section class="section" style="background:var(--bg-deep);position:relative;z-index:1;">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Deep Dive</div>
+      <h2 class="section-title">Understanding <em>Karma Yoga</em></h2>
+      <p class="section-desc">The most misunderstood and most life-changing concept in the Bhagavad Gita.</p>
+    </div>
+
+    <div class="grid grid-2" style="gap:32px;align-items:start;">
+      <div>
+        <div class="card reveal" style="margin-bottom:20px;">
+          <div class="section-label" style="margin-bottom:12px;">What Karma Is NOT</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <span style="color:var(--crimson);font-size:1.1rem;flex-shrink:0;">✗</span>
+              <p style="font-size:0.92rem;">Fate — predetermined by past actions you can't change</p>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <span style="color:var(--crimson);font-size:1.1rem;flex-shrink:0;">✗</span>
+              <p style="font-size:0.92rem;">Cosmic punishment or reward for moral behaviour</p>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <span style="color:var(--crimson);font-size:1.1rem;flex-shrink:0;">✗</span>
+              <p style="font-size:0.92rem;">An excuse for passivity ("whatever happens is my karma")</p>
+            </div>
+          </div>
+        </div>
+        <div class="card reveal">
+          <div class="section-label" style="margin-bottom:12px;">What Karma IS</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <span style="color:var(--sage);font-size:1.1rem;flex-shrink:0;">✓</span>
+              <p style="font-size:0.92rem;">Action itself — every conscious choice you make</p>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <span style="color:var(--sage);font-size:1.1rem;flex-shrink:0;">✓</span>
+              <p style="font-size:0.92rem;">The principle of cause and effect operating through consciousness</p>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <span style="color:var(--sage);font-size:1.1rem;flex-shrink:0;">✓</span>
+              <p style="font-size:0.92rem;">The invitation to act fully, without clinging to outcomes</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal-right">
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="verse-block" style="cursor:pointer;" onclick="this.querySelector('.verse-body').classList.toggle('open');this.querySelector('.verse-toggle').textContent=this.querySelector('.verse-body').classList.contains('open')?'−':'+'">
+            <div class="verse-header">
+              <span class="verse-num">2.47</span>
+              <span class="verse-preview">You have a right to your actions, never to their fruits…</span>
+              <button class="verse-toggle">+</button>
+            </div>
+            <div class="verse-body">
+              <div class="verse-sanskrit">कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।<br>मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥</div>
+              <div class="verse-translation">You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions. Never consider yourself the cause of the results of your activities, and never be attached to not doing your duty.</div>
+              <div class="verse-modern"><div class="verse-modern-label">In Today's Life</div><p>In modern life: do your best work, then let go of whether it succeeds. This verse is the antidote to anxiety about outcomes, performance, and approval.</p></div>
+            </div>
+          </div>
+
+          <div class="verse-block" style="cursor:pointer;" onclick="this.querySelector('.verse-body').classList.toggle('open');this.querySelector('.verse-toggle').textContent=this.querySelector('.verse-body').classList.contains('open')?'−':'+'">
+            <div class="verse-header">
+              <span class="verse-num">3.19</span>
+              <span class="verse-preview">Without attachment, one should act as a matter of duty…</span>
+              <button class="verse-toggle">+</button>
+            </div>
+            <div class="verse-body">
+              <div class="verse-sanskrit">तस्मादसक्तः सततं कार्यं कर्म समाचर।<br>असक्तो ह्याचरन्कर्म परमाप्नोति पूरुषः॥</div>
+              <div class="verse-translation">Therefore, without being attached to the fruits of activities, one should act as a matter of duty, for by working without attachment one attains the Supreme.</div>
+              <div class="verse-modern"><div class="verse-modern-label">In Today's Life</div><p>The best athletes, artists and leaders describe this state: total presence in what they're doing, without needing a particular outcome. Psychologists call it 'flow.'</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THREE PATHS -->
+<section class="section" style="position:relative;z-index:1;">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Paths to Liberation</div>
+      <h2 class="section-title">The Four <em>Yogas</em></h2>
+      <p class="section-desc">The Gita recognises that different temperaments need different paths. All four lead to the same destination.</p>
+    </div>
+
+    <div class="grid grid-2" style="gap:20px;">
+      <div class="card reveal" style="border-top:3px solid var(--gold);">
+        <div style="font-size:2rem;margin-bottom:16px;">⚡</div>
+        <h3 style="margin-bottom:12px;font-size:1.4rem;">Karma Yoga</h3>
+        <p style="font-size:0.95rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.8;">The Path of Action — for those who are naturally active, energetic, and engaged with the world. Act fully, serve selflessly, release outcomes.</p>
+        <div style="font-size:0.8rem;color:var(--text-muted);">Best explored in: Chapters 3, 4, 5</div>
+        <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="chapter.html?ch=3" class="tag tag-gold">Ch. 3</a>
+          <a href="chapter.html?ch=4" class="tag tag-gold">Ch. 4</a>
+          <a href="chapter.html?ch=5" class="tag tag-gold">Ch. 5</a>
+        </div>
+      </div>
+
+      <div class="card reveal" style="border-top:3px solid #9B78E8;">
+        <div style="font-size:2rem;margin-bottom:16px;">📿</div>
+        <h3 style="margin-bottom:12px;font-size:1.4rem;">Jnana Yoga</h3>
+        <p style="font-size:0.95rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.8;">The Path of Knowledge — for those who are intellectual, philosophical, and driven by understanding. Discriminate between real and unreal. Know the Self.</p>
+        <div style="font-size:0.8rem;color:var(--text-muted);">Best explored in: Chapters 2, 4, 7, 13</div>
+        <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="chapter.html?ch=2" class="tag" style="background:rgba(155,120,232,0.1);color:#9B78E8;">Ch. 2</a>
+          <a href="chapter.html?ch=7" class="tag" style="background:rgba(155,120,232,0.1);color:#9B78E8;">Ch. 7</a>
+          <a href="chapter.html?ch=13" class="tag" style="background:rgba(155,120,232,0.1);color:#9B78E8;">Ch. 13</a>
+        </div>
+      </div>
+
+      <div class="card reveal" style="border-top:3px solid var(--lotus-pink);">
+        <div style="font-size:2rem;margin-bottom:16px;">🪷</div>
+        <h3 style="margin-bottom:12px;font-size:1.4rem;">Bhakti Yoga</h3>
+        <p style="font-size:0.95rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.8;">The Path of Devotion — for those who are loving, relational, and emotionally deep. Offer everything to the divine. Love without condition.</p>
+        <div style="font-size:0.8rem;color:var(--text-muted);">Best explored in: Chapters 9, 12</div>
+        <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="chapter.html?ch=9" class="tag" style="background:rgba(212,82,106,0.1);color:var(--lotus-pink);">Ch. 9</a>
+          <a href="chapter.html?ch=12" class="tag" style="background:rgba(212,82,106,0.1);color:var(--lotus-pink);">Ch. 12</a>
+        </div>
+      </div>
+
+      <div class="card reveal" style="border-top:3px solid var(--sage);">
+        <div style="font-size:2rem;margin-bottom:16px;">🧘</div>
+        <h3 style="margin-bottom:12px;font-size:1.4rem;">Dhyana Yoga</h3>
+        <p style="font-size:0.95rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.8;">The Path of Meditation — for those who are introspective, disciplined, and drawn to stillness. Still the mind. Witness the Self. Abide in pure awareness.</p>
+        <div style="font-size:0.8rem;color:var(--text-muted);">Best explored in: Chapter 6</div>
+        <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="chapter.html?ch=6" class="tag" style="background:rgba(74,124,89,0.1);color:var(--sage);">Ch. 6</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-sm" style="background:var(--bg-deep);text-align:center;position:relative;z-index:1;">
+  <div class="container">
+    <div class="glass-panel" style="padding:48px;max-width:600px;margin:0 auto;">
+      <div style="font-size:2.5rem;margin-bottom:20px;">🌺</div>
+      <h2 style="margin-bottom:16px;">Not sure which path is yours?</h2>
+      <p style="color:var(--text-secondary);margin-bottom:28px;line-height:1.8;">Ask the AI Guide and explore which teaching resonates most with your nature and circumstances.</p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <a href="companion.html" class="btn btn-primary">Ask the AI Guide</a>
+        <a href="chapters.html" class="btn btn-outline">Read the Chapters</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" style="position:relative;z-index:1;">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+      <div class="footer-brand">ॐ Bhagavad Gita</div>
+      <nav style="display:flex;gap:24px;flex-wrap:wrap;">
+        <a href="chapters.html" style="font-size:0.85rem;color:var(--text-muted);">All Chapters</a>
+        <a href="wisdom.html" style="font-size:0.85rem;color:var(--text-muted);">Daily Wisdom</a>
+        <a href="companion.html" style="font-size:0.85rem;color:var(--text-muted);">AI Guide</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/images.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/animations.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Quick nav pills (uses the same THEMES array app.js renders the grid from)
+  const nav = document.getElementById('theme-quick-nav');
+  if (nav && typeof THEMES !== 'undefined') {
+    nav.innerHTML = THEMES.map(t => `
+      <button class="concept-tag" onclick="scrollToTheme('${t.id}')">
+        ${t.icon} ${t.name.split(' ')[0]}
+      </button>`).join('');
+  }
+
+  // Open theme from URL hash (e.g. themes.html#karma)
+  if (location.hash) {
+    const id = location.hash.slice(1);
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        toggleTheme(id);
+      }
+    }, 500);
+  }
+});
+
+function scrollToTheme(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  toggleTheme(id);
+}
+</script>
+<script>
+// Service worker removed — actively unregister any previously installed one and clear old caches
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+}
+if (window.caches && caches.keys) {
+  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+}
+</script>
+</body>
+</html>

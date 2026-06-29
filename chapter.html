@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter — Bhagavad Gita</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    .verse-body { animation: verse-open 0.25s ease; }
+    @keyframes verse-open { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+    .chapter-hero-art { position:relative; z-index:1; }
+    .jump-grid { display:flex;gap:5px;flex-wrap:wrap;max-height:180px;overflow-y:auto;padding:4px 0; }
+    .jump-btn { font-size:0.72rem;padding:4px 9px;border:1px solid var(--border);border-radius:4px;color:var(--text-muted);text-decoration:none;transition:all 0.2s;background:none;cursor:pointer; }
+    .jump-btn:hover { color:var(--gold);border-color:var(--border-hover); }
+    .all-ch-link { display:flex;gap:10px;padding:7px 10px;border-radius:6px;font-size:0.82rem;text-decoration:none;transition:all 0.18s; }
+    .all-ch-link:hover { background:var(--gold-glow);color:var(--gold) !important; }
+  </style>
+</head>
+<body data-page="chapter">
+
+<div class="reading-progress"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="logo-om">ॐ</span><span>Bhagavad Gita</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="story.html">Story</a></li>
+      <li><a href="chapters.html" class="active">Chapters</a></li>
+      <li><a href="themes.html">Themes</a></li>
+      <li><a href="wisdom.html">Daily Wisdom</a></li>
+      <li><a href="companion.html">AI Guide</a></li>
+      <li><a href="search.html">Search</a></li>
+      <li><a href="reflections.html">Reflections</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="chapters.html" class="btn-nav">← All Chapters</a>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<nav class="mobile-nav">
+  <a href="index.html">Home</a>
+  <a href="chapters.html">← All Chapters</a>
+  <a href="themes.html">Themes</a>
+  <a href="companion.html">AI Guide</a>
+</nav>
+
+<!-- CHAPTER HEADER -->
+<section style="padding:calc(var(--nav-height) + 40px) 0 32px;position:relative;overflow:hidden;background:linear-gradient(to bottom, var(--bg-void), var(--bg-deep));">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.07) 0%, transparent 65%);pointer-events:none;"></div>
+  <!-- BG watermark number -->
+  <div id="chapter-bg-num" style="position:absolute;right:-20px;top:50%;transform:translateY(-50%);font-family:var(--font-display);font-size:28vw;color:var(--gold);opacity:0.03;line-height:1;pointer-events:none;"></div>
+
+  <div class="container" style="position:relative;z-index:1;">
+    <!-- Breadcrumb -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+      <a href="chapters.html" style="font-size:0.78rem;color:var(--text-muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">← All Chapters</a>
+      <span style="color:var(--border);">·</span>
+      <span id="chapter-breadcrumb" style="font-size:0.78rem;color:var(--gold);"></span>
+    </div>
+
+    <!-- Hero chapter art -->
+    <div id="chapter-hero-image" style="display:none;margin-bottom:28px;" class="chapter-hero-art"></div>
+
+    <h1 id="chapter-title" style="margin-bottom:10px;">Loading…</h1>
+    <div id="chapter-meta"></div>
+
+    <!-- Key teaching -->
+    <div class="chapter-teaching reveal" id="chapter-key-teaching" style="display:none;margin-top:28px;">
+      <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Central Teaching</div>
+      <div id="chapter-teaching-text" style="font-family:var(--font-display);font-style:italic;font-size:1.18rem;color:var(--text-primary);line-height:1.55;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div style="text-align:center;padding:10px 0;background:var(--bg-deep);border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);">
+  <div style="font-family:var(--font-sanskrit);color:var(--gold);opacity:0.45;font-size:1rem;letter-spacing:0.3em;">॥ श्रीमद्भगवद्गीता ॥</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="section" style="position:relative;z-index:1;padding-top:40px;">
+  <div class="container">
+    <div class="chapter-layout">
+
+      <!-- VERSES COLUMN -->
+      <div>
+        <div id="verses-container" role="list" aria-label="Chapter verses"></div>
+
+        <!-- Chapter Nav -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:52px;padding-top:28px;border-top:1px solid var(--divider);">
+          <a id="prev-chapter" href="#" class="btn btn-outline">← Previous</a>
+          <a href="chapters.html" class="btn btn-ghost">All Chapters</a>
+          <a id="next-chapter" href="#" class="btn btn-outline">Next →</a>
+        </div>
+
+        <!-- Ask Guide CTA -->
+        <div style="margin-top:44px;text-align:center;padding:36px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);">
+          <div style="font-size:2rem;margin-bottom:14px;">🪷</div>
+          <h3 style="margin-bottom:10px;font-size:1.35rem;">Questions about this chapter?</h3>
+          <p style="color:var(--text-muted);margin-bottom:22px;font-size:0.92rem;">The AI Guide can explain any verse, explore a theme, or show how it applies to your life.</p>
+          <a href="companion.html" class="btn btn-primary">Talk to the AI Guide</a>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="chapter-sidebar-col">
+        <div id="chapter-sidebar"></div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- FLOATING CONTROLS -->
+<div class="chapter-controls" id="chapter-controls" style="opacity:0;transition:opacity 0.6s ease;">
+  <button class="ctrl-btn" onclick="expandAllVerses()">⊞ Expand All</button>
+  <div class="ctrl-divider"></div>
+  <button class="ctrl-btn" onclick="collapseAllVerses()">⊟ Collapse</button>
+  <div class="ctrl-divider"></div>
+  <button class="ctrl-btn" onclick="shareChapter()">↗ Share</button>
+  <div class="ctrl-divider"></div>
+  <a class="ctrl-btn" href="companion.html">🪷 Ask Guide</a>
+</div>
+
+<footer class="footer" style="position:relative;z-index:1;">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <div class="footer-brand">ॐ Bhagavad Gita</div>
+      <nav style="display:flex;gap:20px;flex-wrap:wrap;">
+        <a href="chapters.html" style="font-size:0.83rem;color:var(--text-muted);">All Chapters</a>
+        <a href="themes.html" style="font-size:0.83rem;color:var(--text-muted);">Themes</a>
+        <a href="wisdom.html" style="font-size:0.83rem;color:var(--text-muted);">Daily Wisdom</a>
+        <a href="companion.html" style="font-size:0.83rem;color:var(--text-muted);">AI Guide</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/images.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/animations.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Note: buildChapterReader() is called from app.js DOMContentLoaded
+  // Just show controls after delay
+  setTimeout(() => {
+    const c = document.getElementById('chapter-controls');
+    if (c) c.style.opacity = '1';
+  }, 1500);
+});
+
+function expandAllVerses() {
+  document.querySelectorAll('.verse-body').forEach(b => b.classList.add('open'));
+  document.querySelectorAll('.verse-toggle').forEach(t => t.textContent = '−');
+  showToast('All verses expanded');
+}
+function collapseAllVerses() {
+  document.querySelectorAll('.verse-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.verse-toggle').forEach(t => t.textContent = '+');
+  showToast('All verses collapsed');
+}
+function shareChapter() {
+  if (navigator.share) { navigator.share({ title: document.title, url: location.href }); }
+  else { navigator.clipboard.writeText(location.href); showToast('📋 Link copied'); }
+}
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' && !e.target.closest('input,textarea')) document.getElementById('next-chapter')?.click();
+  if (e.key === 'ArrowLeft'  && !e.target.closest('input,textarea')) document.getElementById('prev-chapter')?.click();
+});
+// Service worker removed — actively unregister any previously installed one and clear old caches
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+}
+if (window.caches && caches.keys) {
+  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+}
+</script>
+</body>
+</html>

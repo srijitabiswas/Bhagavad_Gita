@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search — Bhagavad Gita</title>
+  <meta name="description" content="Search across all 18 chapters, 700 verses, themes and teachings of the Bhagavad Gita.">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    .search-results-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      min-height: 200px;
+    }
+
+    .search-result-item {
+      display: flex;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--divider);
+      text-decoration: none;
+      transition: background var(--transition);
+      align-items: flex-start;
+    }
+    .search-result-item:hover { background: var(--bg-card-hover); }
+    .search-result-item:last-child { border-bottom: none; }
+
+    .result-type {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .result-info { flex: 1; }
+    .result-title {
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+    }
+    .result-desc {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .result-meta {
+      font-size: 0.75rem;
+      color: var(--gold);
+      margin-top: 6px;
+    }
+    .result-arrow {
+      color: var(--text-muted);
+      flex-shrink: 0;
+      font-size: 1.1rem;
+      margin-top: 2px;
+      transition: transform var(--transition), color var(--transition);
+    }
+    .search-result-item:hover .result-arrow {
+      color: var(--gold);
+      transform: translateX(4px);
+    }
+
+    .search-empty {
+      padding: 60px 32px;
+      text-align: center;
+    }
+    .search-placeholder {
+      padding: 60px 32px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    /* Highlighted match */
+    .highlight { color: var(--gold); font-weight: 600; }
+
+    /* Search filters */
+    .search-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .search-filter:hover, .search-filter.active {
+      color: var(--gold);
+      border-color: var(--border-hover);
+      background: var(--gold-glow);
+    }
+  </style>
+</head>
+<body data-page="search">
+
+<div class="reading-progress"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="logo-om">ॐ</span><span>Bhagavad Gita</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="story.html">Story</a></li>
+      <li><a href="chapters.html">Chapters</a></li>
+      <li><a href="themes.html">Themes</a></li>
+      <li><a href="wisdom.html">Daily Wisdom</a></li>
+      <li><a href="companion.html">AI Guide</a></li>
+      <li><a href="search.html" class="active">Search</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="companion.html" class="btn-nav">AI Guide</a>
+      <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<nav class="mobile-nav">
+  <a href="index.html">Home</a><a href="chapters.html">Chapters</a>
+  <a href="themes.html">Themes</a><a href="companion.html">AI Guide</a>
+</nav>
+
+<!-- HERO / SEARCH BAR -->
+<section style="padding:calc(var(--nav-height) + 60px) 0 40px;position:relative;overflow:hidden;">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-photo" style="background-image:url('assets/images/photos/krishna-arjuna-horses.jpg');background-position:center 18%;"></div>
+  <div class="container" style="position:relative;z-index:1;text-align:center;">
+    <div class="section-label reveal" style="margin-bottom:20px;">Semantic Search</div>
+    <h1 class="reveal" style="margin-bottom:32px;">Search the <em>Sacred Text</em></h1>
+
+    <!-- Main search bar -->
+    <div class="reveal" style="max-width:680px;margin:0 auto 20px;">
+      <div class="search-bar">
+        <input type="search" id="search-input" class="search-input"
+          placeholder="Search verses, chapters, themes, emotions, keywords…"
+          autofocus autocomplete="off"
+          aria-label="Search the Bhagavad Gita">
+        <span class="search-icon" aria-hidden="true">🔍</span>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="reveal" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:8px;">
+      <button class="search-filter active" data-filter="all"     onclick="setFilter('all',this)">All</button>
+      <button class="search-filter" data-filter="chapter"  onclick="setFilter('chapter',this)">Chapters</button>
+      <button class="search-filter" data-filter="verse"    onclick="setFilter('verse',this)">Verses</button>
+      <button class="search-filter" data-filter="theme"    onclick="setFilter('theme',this)">Themes</button>
+      <button class="search-filter" data-filter="emotion"  onclick="setFilter('emotion',this)">Emotions</button>
+    </div>
+    <div style="font-size:0.75rem;color:var(--text-muted);">Press Enter or type to search instantly</div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="section" style="padding-top:0;position:relative;z-index:1;">
+  <div class="container">
+    <div style="max-width:780px;margin:0 auto;">
+
+      <!-- Result count -->
+      <div id="result-count" style="font-size:0.82rem;color:var(--text-muted);margin-bottom:16px;min-height:20px;"></div>
+
+      <!-- Results container -->
+      <div class="search-results-container">
+        <div id="search-results">
+          <div class="search-placeholder">
+            <div style="font-size:3rem;margin-bottom:16px;">🔍</div>
+            <p style="color:var(--text-muted);">Begin typing to search across all chapters, verses, themes, and teachings.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Popular searches -->
+      <div id="popular-section" style="margin-top:32px;">
+        <div class="section-label" style="margin-bottom:16px;">Popular Searches</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;" id="popular-tags"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BROWSE BY -->
+<section class="section-sm" style="background:var(--bg-deep);position:relative;z-index:1;">
+  <div class="container">
+    <div style="max-width:780px;margin:0 auto;">
+      <div class="section-label" style="margin-bottom:24px;text-align:center;">Browse Without Searching</div>
+      <div class="grid grid-3" style="gap:12px;">
+        <a href="chapters.html" class="card" style="text-decoration:none;text-align:center;padding:24px;">
+          <div style="font-size:2rem;margin-bottom:12px;">📖</div>
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px;">All 18 Chapters</div>
+          <div style="font-size:0.82rem;color:var(--text-muted);">Browse the complete Gita chapter by chapter</div>
+        </a>
+        <a href="themes.html" class="card" style="text-decoration:none;text-align:center;padding:24px;">
+          <div style="font-size:2rem;margin-bottom:12px;">🗺️</div>
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px;">By Theme</div>
+          <div style="font-size:0.82rem;color:var(--text-muted);">Karma, Devotion, Wisdom, Peace and more</div>
+        </a>
+        <a href="index.html#emotion-cards" class="card" style="text-decoration:none;text-align:center;padding:24px;">
+          <div style="font-size:2rem;margin-bottom:12px;">💙</div>
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px;">By Feeling</div>
+          <div style="font-size:0.82rem;color:var(--text-muted);">Find verses for what you're experiencing now</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" style="position:relative;z-index:1;">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+      <div class="footer-brand">ॐ Bhagavad Gita</div>
+      <nav style="display:flex;gap:24px;flex-wrap:wrap;">
+        <a href="chapters.html" style="font-size:0.85rem;color:var(--text-muted);">All Chapters</a>
+        <a href="themes.html" style="font-size:0.85rem;color:var(--text-muted);">Themes</a>
+        <a href="companion.html" style="font-size:0.85rem;color:var(--text-muted);">AI Guide</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/images.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/animations.js"></script>
+<script>
+let currentFilter = 'all';
+
+// Popular search terms
+const POPULAR = [
+  'karma', 'soul', 'meditation', 'dharma', 'fear', 'duty', 'peace',
+  'grief', 'action', 'devotion', 'wisdom', 'liberation', 'surrender',
+  'mind', 'atman', 'yoga', 'purpose', 'detachment'
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+  initSearch();
+
+  // Popular tags
+  const container = document.getElementById('popular-tags');
+  if (container) {
+    container.innerHTML = POPULAR.map(term => `
+      <button class="concept-tag" onclick="document.getElementById('search-input').value='${term}';triggerSearch('${term}')">
+        ${term}
+      </button>`).join('');
+  }
+
+  // Check URL params
+  const q = new URLSearchParams(location.search).get('q');
+  if (q) {
+    document.getElementById('search-input').value = q;
+    triggerSearch(q);
+  }
+});
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.search-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const q = document.getElementById('search-input').value.trim();
+  if (q) triggerSearch(q);
+}
+
+function triggerSearch(query) {
+  const results = document.getElementById('search-results');
+  const count   = document.getElementById('result-count');
+  const popular = document.getElementById('popular-section');
+  if (!results) return;
+
+  if (!query || query.length < 2) {
+    results.innerHTML = `<div class="search-placeholder"><div style="font-size:3rem;margin-bottom:16px;">🔍</div><p style="color:var(--text-muted);">Begin typing to search...</p></div>`;
+    if (count) count.textContent = '';
+    if (popular) popular.style.display = '';
+    return;
+  }
+
+  const q    = query.toLowerCase();
+  const hits = [];
+
+  GITA_DATA.chapters.forEach(ch => {
+    if (currentFilter === 'all' || currentFilter === 'chapter') {
+      if (ch.name.toLowerCase().includes(q) || ch.summary.toLowerCase().includes(q) ||
+          ch.theme.toLowerCase().includes(q) || ch.keyWords.some(w => w.toLowerCase().includes(q))) {
+        hits.push({
+          type: 'chapter',
+          icon: '📖',
+          title: `Chapter ${ch.id}: ${ch.name}`,
+          subtitle: `${ch.verseCount} verses · ${ch.theme}`,
+          desc: ch.summary.slice(0, 130) + '…',
+          href: `chapter.html?ch=${ch.id}`
+        });
+      }
+    }
+    if (currentFilter === 'all' || currentFilter === 'verse') {
+      ch.verses.forEach(v => {
+        if (v.translation.toLowerCase().includes(q) || v.explanation.toLowerCase().includes(q) ||
+            v.sanskrit.toLowerCase().includes(q)    || (v.modern && v.modern.toLowerCase().includes(q))) {
+          hits.push({
+            type: 'verse',
+            icon: '🕉️',
+            title: `Verse ${v.num}`,
+            subtitle: `Chapter ${ch.id}: ${ch.name}`,
+            desc: v.translation.slice(0, 130) + '…',
+            href: `chapter.html?ch=${ch.id}&v=${v.num}`
+          });
+        }
+      });
+    }
+  });
+
+  if (currentFilter === 'all' || currentFilter === 'theme') {
+    GITA_DATA.themes.forEach(t => {
+      if (t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q) || t.id.toLowerCase().includes(q)) {
+        hits.push({
+          type: 'theme',
+          icon: t.icon,
+          title: t.name,
+          subtitle: `Theme · Chapters ${t.chapters.join(', ')}`,
+          desc: t.desc,
+          href: `themes.html#${t.id}`
+        });
+      }
+    });
+  }
+
+  if (currentFilter === 'all' || currentFilter === 'emotion') {
+    GITA_DATA.emotions.forEach(e => {
+      if (e.label.toLowerCase().includes(q) || e.id.toLowerCase().includes(q)) {
+        hits.push({
+          type: 'emotion',
+          icon: e.icon,
+          title: `Feeling ${e.label}`,
+          subtitle: `Emotional guidance · ${e.keyVerses.length} key verses`,
+          desc: `Find Krishna's guidance for moments of ${e.label.toLowerCase()}`,
+          href: `index.html#emotion-cards`
+        });
+      }
+    });
+  }
+
+  // Update count
+  if (count) {
+    count.textContent = hits.length
+      ? `${hits.length} result${hits.length !== 1 ? 's' : ''} for "${query}"`
+      : '';
+  }
+  if (popular) popular.style.display = 'none';
+
+  // Render results with highlighted matches
+  results.innerHTML = hits.length
+    ? hits.slice(0, 20).map(h => `
+        <a href="${h.href}" class="search-result-item">
+          <div class="result-type">
+            <span class="tag tag-gold">${h.type}</span>
+          </div>
+          <div class="result-info">
+            <div class="result-title">${highlightMatch(h.title, query)}</div>
+            <div class="result-meta">${h.subtitle}</div>
+            <div class="result-desc">${highlightMatch(h.desc, query)}</div>
+          </div>
+          <div class="result-arrow">→</div>
+        </a>`).join('')
+    : `<div class="search-empty">
+        <div style="font-size:2.5rem;margin-bottom:16px;">🔍</div>
+        <div style="color:var(--text-primary);font-family:var(--font-display);font-size:1.2rem;margin-bottom:8px;">No results for "${query}"</div>
+        <p style="color:var(--text-muted);margin-bottom:24px;">Try different keywords, or explore by theme or emotion.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <a href="themes.html" class="btn btn-outline" style="padding:10px 20px;font-size:0.82rem;">Browse Themes</a>
+          <a href="companion.html" class="btn btn-outline" style="padding:10px 20px;font-size:0.82rem;">Ask AI Guide</a>
+        </div>
+      </div>`;
+}
+
+function highlightMatch(text, query) {
+  if (!query) return text;
+  const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+  return text.replace(re, '<span class="highlight">$1</span>');
+}
+
+// Override initSearch to use enhanced triggerSearch
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('search-input');
+  if (!input) return;
+  let debounce;
+  input.addEventListener('input', () => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => triggerSearch(input.value.trim()), 180);
+  });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') triggerSearch(input.value.trim());
+    if (e.key === 'Escape') { input.value = ''; triggerSearch(''); }
+  });
+});
+</script>
+
+<style>
+.concept-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.concept-tag:hover {
+  color: var(--gold);
+  border-color: var(--border-hover);
+  background: var(--gold-glow);
+}
+</style>
+<script>
+// Service worker removed — actively unregister any previously installed one and clear old caches
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+}
+if (window.caches && caches.keys) {
+  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+}
+</script>
+</body>
+</html>

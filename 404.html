@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found — Bhagavad Gita</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body { display:flex; flex-direction:column; min-height:100vh; justify-content:center; align-items:center; text-align:center; padding:40px 20px; }
+    .error-om { font-family:var(--font-sanskrit); font-size:8rem; color:var(--gold); opacity:0.15; line-height:1; margin-bottom:-40px; animation:float-gentle 4s ease-in-out infinite; }
+    @keyframes float-gentle { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    .error-code { font-family:var(--font-display); font-size:7rem; font-weight:300; color:var(--gold); line-height:1; margin-bottom:8px; }
+    .error-title { font-family:var(--font-display); font-size:2rem; margin-bottom:16px; }
+    .error-verse { font-family:var(--font-display); font-style:italic; font-size:1.1rem; color:var(--text-secondary); max-width:480px; margin:0 auto 12px; line-height:1.6; }
+    .error-source { font-size:0.82rem; color:var(--gold); margin-bottom:40px; }
+    canvas { position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.3; }
+    main { position:relative; z-index:1; }
+  </style>
+</head>
+<body data-page="404">
+<canvas id="particle-canvas"></canvas>
+
+<nav class="nav scrolled">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="logo-om">ॐ</span><span>Bhagavad Gita</span></a>
+  </div>
+</nav>
+
+<main>
+  <div class="error-om">ॐ</div>
+  <div class="error-code">404</div>
+  <h1 class="error-title">This path does not exist</h1>
+
+  <blockquote>
+    <p class="error-verse">"You have a right to perform your prescribed duties, but the page you seek is not among them."</p>
+    <cite class="error-source">— Paraphrase of Bhagavad Gita 2.47</cite>
+  </blockquote>
+
+  <p style="color:var(--text-muted);margin-bottom:40px;font-size:0.95rem;">The page you were looking for has wandered from the battlefield. Let us guide you back.</p>
+
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+    <a href="index.html"    class="btn btn-primary">Return Home</a>
+    <a href="chapters.html" class="btn btn-outline">Read the Chapters</a>
+    <a href="search.html"   class="btn btn-ghost">Search</a>
+  </div>
+
+  <div style="margin-top:48px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;">
+    <a href="story.html"    style="font-size:0.85rem;color:var(--text-muted);">Story of Kurukshetra</a>
+    <a href="themes.html"   style="font-size:0.85rem;color:var(--text-muted);">Theme Explorer</a>
+    <a href="wisdom.html"   style="font-size:0.85rem;color:var(--text-muted);">Daily Wisdom</a>
+    <a href="companion.html"style="font-size:0.85rem;color:var(--text-muted);">AI Guide</a>
+  </div>
+</main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/animations.js"></script>
+</body>
+</html>

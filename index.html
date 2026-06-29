@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bhagavad Gita — Immersive Digital Experience</title>
+  <meta name="description" content="An immersive journey through every chapter, every teaching, and every life lesson of the Bhagavad Gita.">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body data-page="home">
+
+<div class="reading-progress"></div>
+<canvas id="particle-canvas"></canvas>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav class="nav" role="navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-om">ॐ</span><span>Bhagavad Gita</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="story.html">Story</a></li>
+      <li><a href="chapters.html">Chapters</a></li>
+      <li><a href="themes.html">Themes</a></li>
+      <li><a href="wisdom.html">Daily Wisdom</a></li>
+      <li><a href="companion.html">AI Guide</a></li>
+      <li><a href="search.html">Search</a></li>
+      <li><a href="reflections.html">Reflections</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="chapters.html" class="btn-nav">Begin Journey</a>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<nav class="mobile-nav">
+  <a href="index.html">Home</a>
+  <a href="story.html">Story of Kurukshetra</a>
+  <a href="chapters.html">All 18 Chapters</a>
+  <a href="themes.html">Theme Explorer</a>
+  <a href="wisdom.html">Daily Wisdom</a>
+  <a href="companion.html">AI Guide</a>
+  <a href="search.html">Search</a>
+  <a href="reflections.html">Reflections</a>
+</nav>
+
+<!-- ═══ HERO — CENTERED ═══ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-bg-image" style="background-image:url('assets/images/photos/krishna-arjuna-clouds.jpg');background-position:center 20%;"></div>
+  <svg class="hero-mandala" id="mandala-svg" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+  <div class="hero-om" aria-hidden="true">ॐ</div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Timeless Sanskrit Wisdom</div>
+
+    <h1 class="hero-title">
+      Discover the <em class="italic">Timeless Wisdom</em><br>
+      of the <span class="gold">Bhagavad Gita</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      An immersive journey through every chapter, every teaching, and every life lesson —
+      from the battlefield of Kurukshetra to your life today.
+    </p>
+
+    <div class="hero-actions">
+      <a href="story.html" class="btn btn-primary">✦ Start the Journey</a>
+      <a href="chapters.html" class="btn btn-outline">Explore All 18 Chapters</a>
+      <a href="wisdom.html" class="btn btn-ghost">Today's Wisdom →</a>
+    </div>
+
+    <!-- Stats -->
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-number">18</div>
+        <div class="hero-stat-label">Chapters</div>
+      </div>
+      <div>
+        <div class="hero-stat-number">701</div>
+        <div class="hero-stat-label">Verses</div>
+      </div>
+      <div>
+        <div class="hero-stat-number">5000+</div>
+        <div class="hero-stat-label">Years of Wisdom</div>
+      </div>
+      <div>
+        <div class="hero-stat-number">∞</div>
+        <div class="hero-stat-label">Applications</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint" aria-hidden="true">
+    <div class="scroll-hint-text">Scroll</div>
+    <div class="scroll-hint-line"></div>
+  </div>
+</section>
+
+<!-- ═══ TODAY'S VERSE STRIP ═══ -->
+<div class="verse-strip" style="position:relative;z-index:1;">
+  <div class="container">
+    <div class="verse-strip-inner">
+      <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);white-space:nowrap;">Today's Verse</div>
+      <div class="verse-strip-quote">"You have a right to your actions, never to their fruits."</div>
+      <div class="verse-strip-ref">— Gita 2.47</div>
+      <a href="wisdom.html" class="btn btn-outline" style="padding:9px 20px;font-size:0.77rem;">Read More</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FEATURES ═══ -->
+<section class="section-sm" style="position:relative;z-index:1;">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;" id="features-grid">
+      <div class="card reveal" style="text-align:center;padding:28px 20px;">
+        <div style="font-size:2.2rem;margin-bottom:14px;">📖</div>
+        <h4 style="color:var(--text-primary);margin-bottom:8px;font-size:1.1rem;">All 701 Verses</h4>
+        <p style="font-size:0.84rem;">Sanskrit · Hindi · Transliteration · English Translation</p>
+      </div>
+      <div class="card reveal" style="text-align:center;padding:28px 20px;">
+        <div style="font-size:2.2rem;margin-bottom:14px;">🤖</div>
+        <h4 style="color:var(--text-primary);margin-bottom:8px;font-size:1.1rem;">AI Companion</h4>
+        <p style="font-size:0.84rem;">Ask any question and receive wisdom from the actual text</p>
+      </div>
+      <div class="card reveal" style="text-align:center;padding:28px 20px;">
+        <div style="font-size:2.2rem;margin-bottom:14px;">💙</div>
+        <h4 style="color:var(--text-primary);margin-bottom:8px;font-size:1.1rem;">Emotion Guide</h4>
+        <p style="font-size:0.84rem;">Find verses tailored to what you're experiencing right now</p>
+      </div>
+      <div class="card reveal" style="text-align:center;padding:28px 20px;">
+        <div style="font-size:2.2rem;margin-bottom:14px;">🗺️</div>
+        <h4 style="color:var(--text-primary);margin-bottom:8px;font-size:1.1rem;">Theme Explorer</h4>
+        <p style="font-size:0.84rem;">Browse Karma · Devotion · Wisdom · Meditation & more</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STORY TEASER ═══ -->
+<section class="section" style="position:relative;z-index:1;background:var(--bg-deep);">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;" class="story-teaser-grid">
+      <div>
+        <div class="section-label reveal">The Setting</div>
+        <h2 class="reveal" style="margin-bottom:24px;">The Battle That<br><em>Changed the World</em></h2>
+        <p class="reveal" style="font-size:1.05rem;color:var(--text-secondary);line-height:1.9;margin-bottom:16px;">
+          It is dawn on the plain of Kurukshetra. Two great armies face each other. In the middle stands Arjuna — staring at the faces of those he must fight. They are his family. His teachers. His friends.
+        </p>
+        <p class="reveal" style="font-size:1.05rem;color:var(--text-secondary);line-height:1.9;margin-bottom:36px;">
+          And in that moment of overwhelming human grief, a conversation begins that has echoed across five thousand years.
+        </p>
+        <a href="story.html" class="btn btn-primary reveal">Experience the Story →</a>
+      </div>
+      <div class="reveal-right">
+        <div id="home-story-photo" style="margin-bottom:20px;"></div>
+        <div class="glass-panel" style="padding:40px;text-align:center;">
+          <div style="font-family:var(--font-sanskrit);font-size:2.8rem;color:var(--gold);line-height:1.6;margin-bottom:20px;opacity:0.85;">
+            धर्मक्षेत्रे<br>कुरुक्षेत्रे
+          </div>
+          <p style="font-style:italic;color:var(--text-secondary);margin-bottom:20px;">"In the holy field of Kurukshetra..."</p>
+          <div class="divider"><span class="divider-om">ॐ</span></div>
+          <p style="font-size:0.83rem;color:var(--text-muted);">Opening words · Bhagavad Gita 1.1</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DAILY WISDOM ═══ -->
+<section class="section" style="position:relative;z-index:1;">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Daily Practice</div>
+      <h2 class="section-title">Wisdom for <em>Today</em></h2>
+      <p class="section-desc">Return each day for a new verse, reflection, and practical teaching.</p>
+    </div>
+    <div id="daily-wisdom" class="reveal" style="max-width:860px;margin:0 auto;"></div>
+  </div>
+</section>
+
+<!-- ═══ EMOTION COMPASS ═══ -->
+<section class="section" style="position:relative;z-index:1;background:var(--bg-deep);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Emotional Compass</div>
+      <h2 class="section-title">How Are You <em>Feeling Today?</em></h2>
+      <p class="section-desc">Select what you're experiencing. Receive Krishna's guidance from the most relevant verses.</p>
+    </div>
+    <div id="emotion-cards" class="emotion-grid"></div>
+    <div id="emotion-result" style="display:none;margin-top:40px;max-width:800px;margin-left:auto;margin-right:auto;"></div>
+  </div>
+</section>
+
+<!-- ═══ CHAPTERS PREVIEW ═══ -->
+<section class="section" style="position:relative;z-index:1;">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">18 Chapters · 701 Authentic Verses</div>
+      <h2 class="section-title">The Complete <em>Bhagavad Gita</em></h2>
+      <p class="section-desc">Every verse with Sanskrit, Hindi, transliteration and English — the real scripture from your dataset.</p>
+    </div>
+    <div class="grid grid-3" id="chapter-grid-home"></div>
+    <div style="text-align:center;margin-top:48px;">
+      <a href="chapters.html" class="btn btn-outline">View All 18 Chapters →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ AI COMPANION TEASER ═══ -->
+<section class="section" style="position:relative;z-index:1;background:var(--bg-deep);">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;" class="story-teaser-grid">
+      <div>
+        <div class="section-label reveal">AI-Powered</div>
+        <h2 class="reveal" style="margin-bottom:24px;">Your Personal<br><em>Gita Guide</em></h2>
+        <p class="reveal" style="color:var(--text-secondary);line-height:1.9;margin-bottom:32px;">Ask any question about the Bhagavad Gita's teachings. Find how ancient wisdom applies to anxiety, career stress, grief, purpose, and fear — today.</p>
+        <a href="companion.html" class="btn btn-primary reveal">Talk to the Guide →</a>
+      </div>
+      <div class="reveal-right">
+        <div class="glass-panel" style="padding:28px;">
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;gap:10px;justify-content:flex-end;">
+              <div style="padding:12px 16px;background:rgba(201,168,76,0.13);border:1px solid rgba(201,168,76,0.22);border-radius:12px 12px 4px 12px;font-size:0.88rem;color:var(--text-primary);max-width:78%;">How do I deal with anxiety about results?</div>
+              <div style="width:32px;height:32px;border-radius:50%;background:rgba(139,28,46,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">🙏</div>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:var(--gold-glow);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">🪷</div>
+              <div style="padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px 12px 12px 4px;font-size:0.86rem;line-height:1.7;color:var(--text-secondary);max-width:82%;">
+                Krishna answers in verse 2.47 — perhaps the most famous in all the Gita: <em>"You have a right to your actions, never to their fruits."</em> This is not indifference — it is the freedom that comes from full effort without attachment...
+              </div>
+            </div>
+          </div>
+          <div style="text-align:center;margin-top:16px;padding-top:16px;border-top:1px solid var(--divider);">
+            <a href="companion.html" style="font-size:0.8rem;color:var(--gold);">Continue this conversation →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS ═══ -->
+<section class="section stats-section" style="position:relative;z-index:1;">
+  <div class="container">
+    <div class="stat-grid">
+      <div class="reveal"><div class="stat-number" data-target="18">0</div><div class="stat-label">Chapters</div></div>
+      <div class="reveal"><div class="stat-number" data-target="701">0</div><div class="stat-label">Sacred Verses</div></div>
+      <div class="reveal"><div class="stat-number" data-target="12">0</div><div class="stat-label">Life Themes</div></div>
+      <div class="reveal"><div class="stat-number" data-target="5000">0</div><div class="stat-label">Years of Wisdom</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer" style="position:relative;z-index:1;">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">ॐ Bhagavad Gita</div>
+        <p class="footer-desc">An immersive digital experience honouring the timeless wisdom of the Srimad Bhagavad Gita. All 701 verses with Sanskrit, Hindi, transliteration and English.</p>
+      </div>
+      <div>
+        <div class="footer-heading">Explore</div>
+        <ul class="footer-links">
+          <li><a href="story.html">The Setting</a></li>
+          <li><a href="chapters.html">All Chapters</a></li>
+          <li><a href="themes.html">Theme Explorer</a></li>
+          <li><a href="wisdom.html">Daily Wisdom</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Tools</div>
+        <ul class="footer-links">
+          <li><a href="companion.html">AI Guide</a></li>
+          <li><a href="search.html">Search</a></li>
+          <li><a href="reflections.html">My Reflections</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Chapters</div>
+        <ul class="footer-links">
+          <li><a href="chapter.html?ch=2">Ch 2 · Sankhya Yoga</a></li>
+          <li><a href="chapter.html?ch=6">Ch 6 · Meditation</a></li>
+          <li><a href="chapter.html?ch=12">Ch 12 · Devotion</a></li>
+          <li><a href="chapter.html?ch=18">Ch 18 · Liberation</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>All 701 verses from public domain Bhagavad Gita · Presented with reverence</div>
+      <div style="font-family:var(--font-display);color:var(--gold);">ॐ तत् सत्</div>
+    </div>
+  </div>
+</footer>
+
+
+<style>
+@media(max-width:900px){
+  .story-teaser-grid{grid-template-columns:1fr !important;gap:36px !important;}
+  .grid-3{grid-template-columns:repeat(2,1fr) !important;}
+  #features-grid{grid-template-columns:repeat(2,1fr) !important;}
+  .hero-stats{gap:20px;}
+}
+@media(max-width:540px){
+  .grid-3{grid-template-columns:1fr !important;}
+  #features-grid{grid-template-columns:1fr 1fr !important;}
+}
+</style>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/images.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/animations.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Stats counter observer
+  const statsObs = new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting) return;
+    document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+      const target = parseInt(el.dataset.target), start = performance.now();
+      const step = now => {
+        const p = Math.min((now-start)/1600, 1);
+        const ease = 1 - Math.pow(1-p, 4);
+        el.textContent = Math.floor(target * ease).toLocaleString('en-IN');
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = target.toLocaleString('en-IN');
+      };
+      requestAnimationFrame(step);
+    });
+    statsObs.disconnect();
+  }, { threshold: 0.5 });
+  document.querySelector('.stats-section') && statsObs.observe(document.querySelector('.stats-section'));
+
+  // Responsive grid
+  const fg = document.getElementById('features-grid');
+  if (fg && window.innerWidth < 768) fg.style.gridTemplateColumns = 'repeat(2,1fr)';
+
+  // Story teaser photo
+  const sp = document.getElementById('home-story-photo');
+  if (sp && typeof buildStoryArt === 'function') sp.innerHTML = buildStoryArt(0);
+});
+
+// Service worker removed — actively unregister any previously installed one and clear old caches
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+}
+if (window.caches && caches.keys) {
+  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+}
+</script>
+</body>
+</html>

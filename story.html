@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Story of Kurukshetra — Bhagavad Gita</title>
+  <meta name="description" content="Experience the story of Kurukshetra — the setting of the Bhagavad Gita — through immersive animated storytelling.">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    /* Cinematic story sections */
+    .story-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 0;
+      position: relative;
+    }
+
+    .story-section:nth-child(even) .story-content { margin-left: auto; }
+
+    /* Scene dividers */
+    .scene-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 0;
+      position: relative;
+    }
+    .scene-line {
+      width: 1px;
+      height: 100px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      opacity: 0.4;
+    }
+    .scene-marker {
+      position: absolute;
+      font-size: 1.5rem;
+      opacity: 0.6;
+    }
+
+    /* Section backgrounds */
+    .scene-1 { background: linear-gradient(to bottom right, rgba(139,28,46,0.1), rgba(5,4,16,0.99)); }
+    .scene-2 { background: linear-gradient(to bottom left,  rgba(201,168,76,0.06), rgba(5,4,16,0.99)); }
+    .scene-3 { background: linear-gradient(to bottom right, rgba(74,124,89,0.06),  rgba(5,4,16,0.99)); }
+    .scene-4 { background: linear-gradient(to bottom left,  rgba(91,61,168,0.08),  rgba(5,4,16,0.99)); }
+    .scene-5 { background: linear-gradient(to bottom,       rgba(201,168,76,0.1),  rgba(5,4,16,0.99)); }
+
+    /* Decorative side elements */
+    .story-deco {
+      position: absolute;
+      font-family: var(--font-sanskrit);
+      font-size: 12vw;
+      opacity: 0.03;
+      color: var(--gold);
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    /* Timeline dots */
+    .timeline {
+      position: fixed;
+      right: 32px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 200;
+    }
+    .tl-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+      border: 1px solid var(--border-hover);
+      transition: background var(--transition), transform var(--transition);
+      cursor: pointer;
+    }
+    .tl-dot.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      transform: scale(1.4);
+    }
+
+    @media (max-width: 768px) {
+      .timeline { display: none; }
+      .story-section { padding: 80px 0; min-height: auto; }
+    }
+
+    /* Quote style */
+    .story-quote {
+      border-left: 3px solid var(--gold);
+      padding: 20px 28px;
+      margin: 28px 0;
+      background: rgba(201,168,76,0.04);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+    .story-quote p {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+    .story-quote cite {
+      display: block;
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    /* Animated entrance */
+    .story-chapter-num {
+      font-family: var(--font-display);
+      font-size: 7rem;
+      font-weight: 300;
+      color: var(--gold);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease 0.2s;
+      line-height: 1;
+      margin-bottom: -20px;
+    }
+    .scene-visible .story-chapter-num {
+      opacity: 0.15;
+      transform: translateY(0);
+    }
+    .story-content h2 {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: all 0.7s ease 0.35s;
+    }
+    .scene-visible .story-content h2 {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .story-content p, .story-content .story-quote, .story-content .symbolism-box {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.7s ease 0.5s;
+    }
+    .scene-visible .story-content p,
+    .scene-visible .story-content .story-quote,
+    .scene-visible .story-content .symbolism-box {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .symbolism-box {
+      background: rgba(91,61,168,0.08);
+      border: 1px solid rgba(91,61,168,0.2);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      margin-top: 24px;
+    }
+    .symbolism-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #9B78E8;
+      margin-bottom: 8px;
+    }
+    .symbolism-box p { color: var(--text-secondary); font-style: italic; transition-delay: 0.65s !important; }
+  </style>
+</head>
+<body data-page="story">
+
+<div class="reading-progress"></div>
+<canvas id="particle-canvas"></canvas>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="logo-om">ॐ</span><span>Bhagavad Gita</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="story.html" class="active">Story</a></li>
+      <li><a href="chapters.html">Chapters</a></li>
+      <li><a href="themes.html">Themes</a></li>
+      <li><a href="wisdom.html">Daily Wisdom</a></li>
+      <li><a href="companion.html">AI Guide</a></li>
+      <li><a href="search.html">Search</a></li>
+      <li><a href="reflections.html">Reflections</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="chapter.html?ch=1" class="btn-nav">Read Chapter 1 →</a>
+      <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<nav class="mobile-nav">
+  <a href="index.html">Home</a><a href="chapters.html">Chapters</a>
+  <a href="themes.html">Themes</a><a href="companion.html">AI Guide</a>
+</nav>
+
+<!-- TIMELINE -->
+<nav class="timeline" aria-label="Story progress">
+  <div class="tl-dot active" data-scene="0" title="The Setting" onclick="scrollToScene(0)"></div>
+  <div class="tl-dot" data-scene="1" title="Two Armies" onclick="scrollToScene(1)"></div>
+  <div class="tl-dot" data-scene="2" title="Arjuna's Choice" onclick="scrollToScene(2)"></div>
+  <div class="tl-dot" data-scene="3" title="The Warrior Falls" onclick="scrollToScene(3)"></div>
+  <div class="tl-dot" data-scene="4" title="The Teacher Speaks" onclick="scrollToScene(4)"></div>
+  <div class="tl-dot" data-scene="5" title="The Dialogue" onclick="scrollToScene(5)"></div>
+</nav>
+
+<!-- ═══ OPENING ═══ -->
+<section class="story-section scene-1" id="scene-0" data-scene="0" style="overflow:hidden;">
+  <div class="page-hero-photo" style="background-image:url('assets/images/photos/krishna-cosmic-circle.jpg');opacity:0.26;background-position:center 38%;"></div>
+  <div class="story-deco" style="right:-5%;top:10%;">धर्म</div>
+  <div class="container">
+    <div style="text-align:center;max-width:700px;margin:0 auto;" class="story-content">
+      <div style="font-size:4rem;margin-bottom:24px;animation:pulse-slow 3s ease-in-out infinite;">🏹</div>
+      <div class="story-chapter-num">ॐ</div>
+      <h1 style="font-size:clamp(2.4rem,6vw,4.5rem);margin-bottom:24px;margin-top:-10px;">
+        The Story of<br><em>Kurukshetra</em>
+      </h1>
+      <p style="font-size:1.1rem;color:var(--text-secondary);line-height:1.9;margin-bottom:32px;">
+        Before there was wisdom, there was war. Before the teaching, a crisis. Before liberation, grief.
+        The Bhagavad Gita does not begin in a temple or a forest — it begins on a battlefield at dawn.
+      </p>
+      <div class="story-quote">
+        <p>"O Sanjaya, assembled in the field of dharma, the field of Kurukshetra — what did they do?"</p>
+        <cite>Dhritarashtra · Bhagavad Gita 1.1 · The first words</cite>
+      </div>
+      <div style="margin-top:40px;">
+        <div style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">Scroll to unfold the story</div>
+        <div style="display:inline-block;animation:bounce 2s ease-in-out infinite;">↓</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+@keyframes pulse-slow { 0%,100%{transform:scale(1)opacity:1} 50%{transform:scale(1.05);opacity:0.8} }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+</style>
+
+<div class="scene-divider"><div class="scene-line"></div></div>
+
+<!-- ═══ SCENE 1: Setting ═══ -->
+<section class="story-section scene-2" id="scene-1" data-scene="1">
+  <div class="story-deco" style="left:-5%;bottom:5%;">कुरु</div>
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;" class="scene-grid">
+      <div class="story-content">
+        <div class="story-chapter-num">01</div>
+        <h2 style="font-size:clamp(1.8rem,4vw,3rem);margin-bottom:20px;">The Two Armies<br><em>Assemble at Dawn</em></h2>
+        <p style="color:var(--text-secondary);line-height:1.9;margin-bottom:20px;">
+          On the vast plain of Kurukshetra — a sacred field where the Pandavas' ancestors had established righteousness — two enormous armies have gathered. It is the eighteenth day of preparation. The air smells of dust and iron and incense.
+        </p>
+        <p style="color:var(--text-secondary);line-height:1.9;margin-bottom:24px;">
+          On one side: the Pandavas, five princes who were robbed of their kingdom by their cousins. On the other: the Kauravas, led by the proud and jealous Duryodhana, who refused every attempt at peace.
+        </p>
+        <div class="symbolism-box">
+          <div class="symbolism-label">Symbolic Meaning</div>
+          <p>Kurukshetra represents the battlefield of life itself — the field where every person must face the armies of their own attachments, fears, and desires.</p>
+        </div>
+      </div>
+      <div class="reveal-right">
+        <div id="story-photo-1" style="margin-bottom:20px;"></div>
+        <div class="glass-panel" style="padding:40px;text-align:center;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px;">
+            <div style="padding:20px;background:rgba(139,28,46,0.1);border:1px solid rgba(139,28,46,0.2);border-radius:var(--radius-md);">
+              <div style="font-size:1.5rem;margin-bottom:8px;">⚔️</div>
+              <div style="font-family:var(--font-display);color:var(--crimson);font-size:1.1rem;margin-bottom:4px;">Kauravas</div>
+              <div style="font-size:0.8rem;color:var(--text-muted);">11 Akshauhinis</div>
+            </div>
+            <div style="padding:20px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:var(--radius-md);">
+              <div style="font-size:1.5rem;margin-bottom:8px;">🏹</div>
+              <div style="font-family:var(--font-display);color:var(--gold);font-size:1.1rem;margin-bottom:4px;">Pandavas</div>
+              <div style="font-size:0.8rem;color:var(--text-muted);">7 Akshauhinis</div>
+            </div>
+          </div>
+          <div style="font-family:var(--font-sanskrit);font-size:1.8rem;color:var(--text-sanskrit);margin-bottom:12px;opacity:0.8;">
+            धर्मक्षेत्रे कुरुक्षेत्रे
+          </div>
+          <p style="font-size:0.85rem;color:var(--text-muted);font-style:italic;">"In the holy field of Kurukshetra..."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="scene-divider"><div class="scene-line"></div></div>
+
+<!-- ═══ SCENE 2: Arjuna surveys ═══ -->
+<section class="story-section scene-3" id="scene-2" data-scene="2">
+  <div class="story-deco" style="right:-5%;top:20%;">अर्जुन</div>
+  <div class="container">
+    <div style="max-width:680px;" class="story-content">
+      <div class="story-chapter-num">02</div>
+      <h2 style="font-size:clamp(1.8rem,4vw,3rem);margin-bottom:20px;">Arjuna Rides<br><em>Between the Armies</em></h2>
+      <p style="color:var(--text-secondary);line-height:1.9;margin-bottom:20px;">
+        Arjuna — the greatest archer of his age, winner of a thousand battles, beloved of the gods — asks Krishna to drive his white chariot between the two armies so he can see those he must fight.
+      </p>
+      <p style="color:var(--text-secondary);line-height:1.9;margin-bottom:24px;">
+        He looks. And what he sees breaks something open inside him. Not enemies. Not abstractions. Faces he knows: his grandfather Bhishma, who taught him to walk. His teacher Drona, who taught him the bow. Brothers. Uncles. Friends. Men he loves.
+      </p>
+      <div class="story-quote">
+        <p>"Seeing them, O Krishna, my limbs fail, my mouth is parched, my body quivers, and my hair stands on end."</p>
+        <cite>Arjuna · Bhagavad Gita 1.29</cite>
+      </div>
+      <div class="symbolism-box">
+        <div class="symbolism-label">The Human Moment</div>
+        <p>Every great decision in life requires us to stand between two forces. Arjuna's chariot between the armies is every human being suspended between duty and love, between what is right and what is comfortable.</p>
+      </div>
+      <div id="story-photo-2" style="margin-top:28px;"></div>
+    </div>
+  </div>
+</section>
+
+<div class="scene-divider"><div class="scene-line"></div></div>
+
+<!-- ═══ SCENE 3: The Fall ═══ -->
+<section class="story-section scene-4" id="scene-3" data-scene="3">
+  <div class="story-deco" style="left:-3%;top:30%;">विषाद</div>
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;" class="scene-grid">
+      <div class="reveal-left">
+        <div id="story-photo-3" style="margin-bottom:20px;"></div>
+        <div class="glass-panel" style="padding:40px;text-align:center;">
+          <div style="font-size:4rem;margin-bottom:20px;animation:tremble 0.5s ease-in-out infinite alternate;">😰</div>
+          <div style="font-family:var(--font-sanskrit);font-size:2rem;color:var(--text-sanskrit);line-height:1.6;margin-bottom:20px;">
+            सीदन्ति मम गात्राणि<br>
+            मुखं च परिशुष्यति
+          </div>
+          <p style="font-size:0.85rem;color:var(--text-muted);font-style:italic;margin-bottom:20px;">"My limbs fail, my mouth dries up..."</p>
+          <div style="display:flex;flex-direction:column;gap:8px;text-align:left;">
+            <div class="tag tag-crimson" style="display:block;text-align:center;">Trembling limbs</div>
+            <div class="tag tag-crimson" style="display:block;text-align:center;">Dry mouth</div>
+            <div class="tag tag-crimson" style="display:block;text-align:center;">Skin burning</div>
+            <div class="tag tag-crimson" style="display:block;text-align:center;">Bow slipping</div>
+            <div class="tag tag-crimson" style="display:block;text-align:center;">Mind in confusion</div>
+          </div>
+        </div>
+      </div>
+      <div class="story-content">
+        <div class="story-chapter-num">03</div>
+        <h2 style="font-size:clamp(1.8rem,4vw,3rem);margin-bottom:20px;">The Greatest Warrior<br><em>Falls Apart</em></h2>
+        <p style="color:var(--text-secondary);line-height:1.9;margin-bottom:20px;">
+          Arjuna's legs give way. His famous bow — Gandiva, the divine weapon — slips from his fingers. His skin burns. His mind spins. And then he says something that no one expected from the warrior-hero of the age:
+        </p>
+        <div class="story-quote">
+          <p>"I will not fight."</p>
+          <cite>Arjuna · Bhagavad Gita 2.9 · The declaration that changed everything</cite>
+        </div>
+        <p style="color:var(--text-secondary);line-height:1.9;margin-top:20px;">
+          The greatest warrior in the world sits down on the floor of his chariot, overcome. And this moment — this total breakdown — is not the end. It is the very beginning of wisdom.
+        </p>
+        <div class="symbolism-box">
+          <div class="symbolism-label">Why This Matters</div>
+          <p>Arjuna's collapse is not weakness — it is the crisis that makes wisdom possible. Only when our usual strategies fail us do we become truly open to transformation. The Gita honours this breakdown.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+@keyframes tremble { from{transform:translateX(-2px)} to{transform:translateX(2px)} }
+@media(max-width:768px){ .scene-grid{grid-template-columns:1fr !important; gap:32px !important;} }
+</style>
+
+<div class="scene-divider"><div class="scene-line"></div></div>
+
+<!-- ═══ SCENE 4: Krishna speaks ═══ -->
+<section class="story-section scene-5" id="scene-4" data-scene="4">
+  <div class="story-deco" style="right:-3%;bottom:10%;">कृष्ण</div>
+  <div class="container">
+    <div style="max-width:680px;margin-left:auto;" class="story-content">
+      <div class="story-chapter-num">04</div>
+      <h2 style="font-size:clamp(1.8rem,4vw,3rem);margin-bottom:20px;">The Teacher<br><em>Begins to Speak</em></h2>
+      <p style="color:var(--text-secondary);line-height:1.9;margin-bottom:20px;">
+        Krishna — charioteer, friend, and the divine in human form — has waited. He has watched Arjuna's breakdown with neither impatience nor judgment. And now, in the silence after the confession, he speaks.
+      </p>
+      <p style="color:var(--text-secondary);line-height:1.9;margin-bottom:24px;">
+        Not with commands. Not with rebuke. With gentle, profound wisdom addressed to a human in genuine crisis. He begins with a challenge wrapped in compassion:
+      </p>
+      <div class="story-quote">
+        <p>"While speaking learned words, you are mourning for what is not worthy of grief. Those who are wise lament neither for the living nor for the dead."</p>
+        <cite>Krishna · Bhagavad Gita 2.11 · The teaching begins</cite>
+      </div>
+      <p style="color:var(--text-secondary);line-height:1.9;margin-top:20px;">
+        And so begins one of the greatest dialogues in all of human history. 700 verses. 18 chapters. Questions that humanity has asked for five thousand years — answered with extraordinary clarity.
+      </p>
+      <div class="symbolism-box">
+        <div class="symbolism-label">The Universal Teacher</div>
+        <p>Every person who has ever felt lost, overwhelmed, or unsure of their duty is Arjuna. Every moment of sudden clarity, every insight that illuminated the path when we needed it most — that is Krishna.</p>
+      </div>
+      <div id="story-photo-4" style="margin-top:28px;"></div>
+    </div>
+  </div>
+</section>
+
+<div class="scene-divider"><div class="scene-line"></div></div>
+
+<!-- ═══ SCENE 5: The Gita begins ═══ -->
+<section class="story-section" id="scene-5" data-scene="5" style="background:linear-gradient(to bottom, rgba(201,168,76,0.06), var(--bg-void));text-align:center;">
+  <div class="container">
+    <div style="max-width:680px;margin:0 auto;" class="story-content">
+      <div class="story-chapter-num" style="text-align:center;">ॐ</div>
+      <h2 style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:24px;">The Dialogue<br><em>That Changed the World</em></h2>
+      <p style="color:var(--text-secondary);line-height:1.9;margin-bottom:20px;">
+        What follows is not a battle report. It is a complete philosophy of life, delivered in the middle of a war. Krishna answers not just Arjuna's immediate question — but every question a human being can ever ask.
+      </p>
+
+      <div id="story-photo-5" style="margin-bottom:32px;"></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:32px 0;text-align:left;">
+        <div style="padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);">
+          <div style="font-size:1.3rem;margin-bottom:10px;">🌟</div>
+          <div style="font-size:0.85rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;">Who am I?</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">Chapters 2, 13 — The immortal soul</div>
+        </div>
+        <div style="padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);">
+          <div style="font-size:1.3rem;margin-bottom:10px;">⚖️</div>
+          <div style="font-size:0.85rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;">What is right action?</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">Chapters 3, 4, 5 — Karma Yoga</div>
+        </div>
+        <div style="padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);">
+          <div style="font-size:1.3rem;margin-bottom:10px;">🧘</div>
+          <div style="font-size:0.85rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;">How do I find peace?</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">Chapter 6 — Meditation & mind</div>
+        </div>
+        <div style="padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);">
+          <div style="font-size:1.3rem;margin-bottom:10px;">🔮</div>
+          <div style="font-size:0.85rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;">What is liberation?</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">Chapter 18 — Complete surrender</div>
+        </div>
+      </div>
+
+      <div style="font-family:var(--font-sanskrit);font-size:2rem;color:var(--gold);opacity:0.7;margin:32px 0;letter-spacing:0.1em;">
+        ॥ श्रीमद्भगवद्गीता ॥
+      </div>
+
+      <p style="color:var(--text-secondary);margin-bottom:40px;font-style:italic;">
+        Now, you are ready to enter the text itself.
+      </p>
+
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <a href="chapter.html?ch=1" class="btn btn-primary">Begin with Chapter 1</a>
+        <a href="chapters.html" class="btn btn-outline">View All 18 Chapters</a>
+        <a href="companion.html" class="btn btn-ghost">Ask the AI Guide</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" style="position:relative;z-index:1;">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+      <div class="footer-brand">ॐ Bhagavad Gita</div>
+      <nav style="display:flex;gap:24px;flex-wrap:wrap;">
+        <a href="chapters.html" style="font-size:0.85rem;color:var(--text-muted);">All Chapters</a>
+        <a href="themes.html" style="font-size:0.85rem;color:var(--text-muted);">Themes</a>
+        <a href="companion.html" style="font-size:0.85rem;color:var(--text-muted);">AI Guide</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/images.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/animations.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Real artwork for each scene
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById('story-photo-' + i);
+    if (el && typeof buildStoryArt === 'function') el.innerHTML = buildStoryArt(i - 1);
+  }
+
+  // Scene scroll observer
+  const scenes = document.querySelectorAll('[data-scene]');
+  const dots   = document.querySelectorAll('.tl-dot');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('scene-visible');
+        const idx = e.target.dataset.scene;
+        dots.forEach(d => d.classList.toggle('active', d.dataset.scene === idx));
+      }
+    });
+  }, { threshold: 0.3 });
+
+  scenes.forEach(s => observer.observe(s));
+});
+
+function scrollToScene(idx) {
+  document.getElementById(`scene-${idx}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
+<script>
+// Service worker removed — actively unregister any previously installed one and clear old caches
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+}
+if (window.caches && caches.keys) {
+  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+}
+</script>
+</body>
+</html>

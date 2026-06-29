@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Wisdom — Bhagavad Gita</title>
+  <meta name="description" content="Return each day for a new verse, reflection and practical teaching from the Bhagavad Gita.">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    .wisdom-archive-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+    .wisdom-archive-card:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+    .wisdom-streak {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .streak-day {
+      width: 28px; height: 28px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      transition: all var(--transition);
+    }
+    .streak-day.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--bg-void);
+      font-weight: 700;
+    }
+    .streak-day.visited {
+      background: var(--gold-glow);
+      border-color: var(--border-hover);
+      color: var(--gold);
+    }
+  </style>
+</head>
+<body data-page="wisdom">
+
+<div class="reading-progress"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="logo-om">ॐ</span><span>Bhagavad Gita</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="story.html">Story</a></li>
+      <li><a href="chapters.html">Chapters</a></li>
+      <li><a href="themes.html">Themes</a></li>
+      <li><a href="wisdom.html" class="active">Daily Wisdom</a></li>
+      <li><a href="companion.html">AI Guide</a></li>
+      <li><a href="search.html">Search</a></li>
+      <li><a href="reflections.html">Reflections</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="companion.html" class="btn-nav">AI Guide</a>
+      <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<nav class="mobile-nav">
+  <a href="index.html">Home</a><a href="chapters.html">Chapters</a>
+  <a href="themes.html">Themes</a><a href="companion.html">AI Guide</a>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero" style="position:relative;overflow:hidden;padding-top:calc(var(--nav-height) + 60px);">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-photo" style="background-image:url('assets/images/photos/krishna-bhishma-sunset.jpg');background-position:center 26%;"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="section-label reveal">Daily Practice</div>
+    <h1 class="reveal" style="margin-bottom:16px;">Wisdom for <em>Today</em></h1>
+    <p class="reveal" style="max-width:480px;margin:0 auto;color:var(--text-secondary);">
+      One verse. One reflection. Under two minutes. Return each day to build a practice of wisdom.
+    </p>
+  </div>
+</section>
+
+<!-- TODAY'S WISDOM -->
+<section class="section" style="position:relative;z-index:1;">
+  <div class="container">
+    <div id="daily-wisdom" class="reveal"></div>
+  </div>
+</section>
+
+<!-- STREAK TRACKER -->
+<section class="section-sm" style="background:var(--bg-deep);position:relative;z-index:1;">
+  <div class="container">
+    <div style="max-width:700px;margin:0 auto;text-align:center;">
+      <div class="section-label" style="margin-bottom:16px;">Your Practice Streak</div>
+      <p style="color:var(--text-muted);margin-bottom:24px;font-size:0.9rem;">Daily visits build a practice. Each day you return, your understanding deepens.</p>
+      <div class="wisdom-streak" id="streak-display" style="justify-content:center;"></div>
+      <p id="streak-count" style="margin-top:16px;color:var(--gold);font-family:var(--font-display);font-size:1.2rem;"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ALL WISDOM ARCHIVE -->
+<section class="section" style="position:relative;z-index:1;">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Wisdom Archive</div>
+      <h2 class="section-title">More <em>Sacred Verses</em></h2>
+      <p class="section-desc">A curated collection of the Gita's most illuminating teachings.</p>
+    </div>
+
+    <div class="grid grid-2" id="wisdom-archive"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" style="position:relative;z-index:1;">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+      <div class="footer-brand">ॐ Bhagavad Gita</div>
+      <nav style="display:flex;gap:24px;flex-wrap:wrap;">
+        <a href="chapters.html" style="font-size:0.85rem;color:var(--text-muted);">All Chapters</a>
+        <a href="themes.html" style="font-size:0.85rem;color:var(--text-muted);">Themes</a>
+        <a href="companion.html" style="font-size:0.85rem;color:var(--text-muted);">AI Guide</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/images.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/animations.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  initDailyWisdom();
+
+  // Streak tracker
+  const today = new Date();
+  const wisdomKey = 'gita-wisdom-visits';
+  const visits = JSON.parse(localStorage.getItem(wisdomKey) || '{}');
+  const todayStr = today.toISOString().split('T')[0];
+  visits[todayStr] = true;
+  localStorage.setItem(wisdomKey, JSON.stringify(visits));
+
+  const streakEl = document.getElementById('streak-display');
+  const countEl  = document.getElementById('streak-count');
+  if (streakEl) {
+    for (let i = 29; i >= 0; i--) {
+      const d   = new Date(today);
+      d.setDate(today.getDate() - i);
+      const key = d.toISOString().split('T')[0];
+      const div = document.createElement('div');
+      div.className = 'streak-day' + (key === todayStr ? ' active' : visits[key] ? ' visited' : '');
+      div.textContent = d.getDate();
+      div.title = key;
+      streakEl.appendChild(div);
+    }
+    const streak = Object.keys(visits).length;
+    if (countEl) countEl.textContent = streak === 1 ? 'First day — beautiful beginning 🌱' : `${streak} days of wisdom 🔥`;
+  }
+
+  // Wisdom archive — curated verses from data
+  const archiveVerses = [
+    { ch: 2, v: '2.20', label: 'The Soul Is Eternal' },
+    { ch: 2, v: '2.47', label: 'Act Without Attachment' },
+    { ch: 2, v: '2.62', label: 'The Anxiety Spiral' },
+    { ch: 3, v: '3.21', label: 'Lead by Example' },
+    { ch: 4, v: '4.7',  label: 'The Divine Returns' },
+    { ch: 6, v: '6.5',  label: 'Be Your Own Best Friend' },
+    { ch: 6, v: '6.35', label: 'Training the Mind' },
+    { ch: 9, v: '9.26', label: 'The Power of a Leaf' },
+    { ch: 12, v: '12.13', label: 'The Ideal Devotee' },
+    { ch: 18, v: '18.66', label: 'The Ultimate Surrender' },
+  ];
+
+  const archive = document.getElementById('wisdom-archive');
+  if (archive) {
+    archive.innerHTML = archiveVerses.map(({ ch, v, label }) => {
+      const chapter = GITA_DATA.chapters[ch - 1];
+      const verse   = chapter?.verses.find(x => x.num === v);
+      if (!verse) return '';
+      return `
+        <div class="wisdom-archive-card reveal" onclick="window.location.href='chapter.html?ch=${ch}&v=${v}'">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <span class="tag tag-gold">${v}</span>
+            <span style="font-size:0.78rem;color:var(--text-muted);">${label}</span>
+          </div>
+          <p style="font-family:var(--font-display);font-style:italic;font-size:1.05rem;color:var(--text-primary);line-height:1.6;margin-bottom:12px;">
+            "${verse.translation.slice(0, 120)}…"
+          </p>
+          <div style="font-size:0.82rem;color:var(--text-muted);">${verse.explanation.slice(0, 100)}…</div>
+          <div style="margin-top:16px;font-size:0.8rem;color:var(--gold);">Read full verse →</div>
+        </div>`;
+    }).join('');
+    initScrollReveal();
+  }
+});
+</script>
+<script>
+// Service worker removed — actively unregister any previously installed one and clear old caches
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+}
+if (window.caches && caches.keys) {
+  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+}
+</script>
+</body>
+</html>

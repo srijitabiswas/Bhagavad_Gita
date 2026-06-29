@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Reflections — Bhagavad Gita</title>
+  <meta name="description" content="Your personal journal — saved verses, reflections, and reading progress.">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    .journal-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      padding: 4px;
+      width: fit-content;
+      margin-bottom: 40px;
+    }
+    .journal-tab {
+      padding: 10px 24px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .journal-tab.active {
+      background: var(--gold);
+      color: var(--bg-void);
+    }
+    .journal-tab:not(.active):hover { color: var(--gold); }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fade-in 0.3s ease; }
+    @keyframes fade-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+    .reflection-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 16px;
+      transition: border-color var(--transition);
+    }
+    .reflection-card:hover { border-color: var(--border-hover); }
+
+    .note-textarea {
+      width: 100%;
+      min-height: 140px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 0.93rem;
+      line-height: 1.7;
+      resize: vertical;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .note-textarea:focus { border-color: var(--gold); }
+    .note-textarea::placeholder { color: var(--text-muted); }
+
+    .bookmark-item {
+      display: flex;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--divider);
+      align-items: flex-start;
+      transition: background var(--transition);
+      cursor: pointer;
+    }
+    .bookmark-item:hover { background: var(--bg-card-hover); }
+    .bookmark-item:last-child { border-bottom: none; }
+
+    .progress-chapter-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--divider);
+    }
+    .progress-chapter-row:last-child { border-bottom: none; }
+    .progress-check {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+    .progress-check.done { background: var(--gold); color: var(--bg-void); }
+    .progress-check.pending {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body data-page="reflections">
+
+<div class="reading-progress"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="logo-om">ॐ</span><span>Bhagavad Gita</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="story.html">Story</a></li>
+      <li><a href="chapters.html">Chapters</a></li>
+      <li><a href="themes.html">Themes</a></li>
+      <li><a href="wisdom.html">Daily Wisdom</a></li>
+      <li><a href="companion.html">AI Guide</a></li>
+      <li><a href="search.html">Search</a></li>
+      <li><a href="reflections.html">Reflections</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="chapters.html" class="btn-nav">Continue Reading</a>
+      <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<nav class="mobile-nav">
+  <a href="index.html">Home</a><a href="chapters.html">Chapters</a>
+  <a href="themes.html">Themes</a><a href="companion.html">AI Guide</a>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero" style="position:relative;overflow:hidden;padding-top:calc(var(--nav-height) + 60px);">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-photo" style="background-image:url('assets/images/photos/krishna-flute-glow.jpg');background-position:center 16%;"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="section-label reveal">Personal Practice</div>
+    <h1 class="reveal" style="margin-bottom:16px;">My <em>Reflections</em></h1>
+    <p class="reveal" style="max-width:460px;margin:0 auto;color:var(--text-secondary);">
+      Your saved verses, personal notes, and reading progress — all stored locally in your browser.
+    </p>
+    <!-- Stats strip -->
+    <div class="reveal" style="display:flex;gap:32px;justify-content:center;margin-top:32px;flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <div id="stat-bookmarks" style="font-family:var(--font-display);font-size:2rem;color:var(--gold);line-height:1;">0</div>
+        <div style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-top:4px;">Bookmarks</div>
+      </div>
+      <div style="text-align:center;">
+        <div id="stat-notes" style="font-family:var(--font-display);font-size:2rem;color:var(--gold);line-height:1;">0</div>
+        <div style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-top:4px;">Notes</div>
+      </div>
+      <div style="text-align:center;">
+        <div id="stat-chapters" style="font-family:var(--font-display);font-size:2rem;color:var(--gold);line-height:1;">0</div>
+        <div style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-top:4px;">Chapters Read</div>
+      </div>
+      <div style="text-align:center;">
+        <div id="stat-streak" style="font-family:var(--font-display);font-size:2rem;color:var(--gold);line-height:1;">0</div>
+        <div style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-top:4px;">Day Streak</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TABS + CONTENT -->
+<section class="section" style="position:relative;z-index:1;">
+  <div class="container" style="max-width:900px;">
+
+    <!-- Tab navigation -->
+    <div class="journal-tabs">
+      <button class="journal-tab active" onclick="switchTab('bookmarks',this)">🔖 Saved Verses</button>
+      <button class="journal-tab" onclick="switchTab('notes',this)">📝 My Notes</button>
+      <button class="journal-tab" onclick="switchTab('progress',this)">📊 Progress</button>
+    </div>
+
+    <!-- ── TAB: BOOKMARKS ── -->
+    <div class="tab-panel active" id="tab-bookmarks">
+      <div id="bookmarks-container">
+        <div style="text-align:center;padding:60px 20px;color:var(--text-muted);">
+          <div style="font-size:3rem;margin-bottom:16px;">🔖</div>
+          <p>No bookmarks yet. While reading a chapter, tap the <strong style="color:var(--gold);">🔖 Bookmark</strong> button on any verse to save it here.</p>
+          <a href="chapters.html" class="btn btn-outline" style="margin-top:24px;">Start Reading</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB: NOTES ── -->
+    <div class="tab-panel" id="tab-notes">
+      <!-- New note form -->
+      <div class="reflection-card" style="margin-bottom:32px;">
+        <div class="section-label" style="margin-bottom:16px;">Add a New Reflection</div>
+        <input type="text" id="note-title" placeholder="Title (optional — e.g. 'On Karma Yoga')"
+          style="width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px 16px;color:var(--text-primary);font-family:var(--font-body);font-size:0.93rem;outline:none;margin-bottom:12px;transition:border-color 0.2s;"
+          onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'">
+        <textarea class="note-textarea" id="note-body" placeholder="Write your reflection, question, or insight…"></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
+          <div style="font-size:0.78rem;color:var(--text-muted);">Stored locally in your browser</div>
+          <button onclick="saveNote()" class="btn btn-primary" style="padding:10px 24px;font-size:0.85rem;">Save Reflection</button>
+        </div>
+      </div>
+
+      <!-- Saved notes -->
+      <div id="notes-container">
+        <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
+          <div style="font-size:3rem;margin-bottom:16px;">📝</div>
+          <p>Your reflections will appear here. Writing deepens understanding.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB: PROGRESS ── -->
+    <div class="tab-panel" id="tab-progress">
+      <!-- Overall progress bar -->
+      <div class="reflection-card" style="margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div class="section-label">Overall Progress</div>
+          <div id="progress-pct" style="font-family:var(--font-display);font-size:1.5rem;color:var(--gold);">0%</div>
+        </div>
+        <div style="background:var(--bg-void);border-radius:var(--radius-full);height:8px;overflow:hidden;margin-bottom:8px;">
+          <div id="overall-bar" style="height:100%;background:linear-gradient(90deg,var(--crimson),var(--gold));border-radius:var(--radius-full);transition:width 1s ease;width:0%;"></div>
+        </div>
+        <p style="font-size:0.82rem;color:var(--text-muted);">Based on chapters visited</p>
+      </div>
+
+      <!-- Chapter list -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;" id="progress-list">
+        <!-- populated by JS -->
+      </div>
+
+      <div style="margin-top:20px;text-align:center;">
+        <button onclick="resetProgress()" style="font-size:0.8rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:var(--radius-full);padding:8px 20px;cursor:pointer;" onmouseover="this.style.color='var(--crimson)'" onmouseout="this.style.color='var(--text-muted)'">
+          Reset Progress
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" style="position:relative;z-index:1;">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+      <div class="footer-brand">ॐ Bhagavad Gita</div>
+      <nav style="display:flex;gap:24px;flex-wrap:wrap;">
+        <a href="chapters.html" style="font-size:0.85rem;color:var(--text-muted);">All Chapters</a>
+        <a href="wisdom.html" style="font-size:0.85rem;color:var(--text-muted);">Daily Wisdom</a>
+        <a href="companion.html" style="font-size:0.85rem;color:var(--text-muted);">AI Guide</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/images.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/animations.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadStats();
+  loadBookmarks();
+  loadNotes();
+  loadProgress();
+});
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.journal-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function loadStats() {
+  const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+  const notes     = JSON.parse(localStorage.getItem('gita-notes') || '[]');
+  const progress  = JSON.parse(localStorage.getItem('gita-progress') || '{}');
+  const visits    = JSON.parse(localStorage.getItem('gita-wisdom-visits') || '{}');
+
+  document.getElementById('stat-bookmarks').textContent = bookmarks.length;
+  document.getElementById('stat-notes').textContent     = notes.length;
+  document.getElementById('stat-chapters').textContent  = Object.keys(progress).length;
+  document.getElementById('stat-streak').textContent    = Object.keys(visits).length;
+}
+
+function loadBookmarks() {
+  const saved    = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+  const container = document.getElementById('bookmarks-container');
+  if (!container) return;
+  if (!saved.length) return;
+
+  const verseData = [];
+  saved.forEach(id => {
+    const [ch, v] = id.split('.').map(Number);
+    const chapter = GITA_DATA.chapters[ch - 1];
+    const verse   = chapter?.verses.find(x => x.num === id);
+    if (verse) verseData.push({ verse, chapter, id });
+  });
+
+  container.innerHTML = `
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;">
+      ${verseData.map(({ verse, chapter, id }) => `
+        <div class="bookmark-item" onclick="window.location.href='chapter.html?ch=${chapter.id}&v=${verse.num}'">
+          <div style="flex-shrink:0;">
+            <span class="tag tag-gold">${verse.num}</span>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:6px;">Chapter ${chapter.id}: ${chapter.name}</div>
+            <div style="font-family:var(--font-display);font-style:italic;color:var(--text-primary);line-height:1.5;margin-bottom:8px;">"${verse.translation.slice(0, 120)}…"</div>
+            <div style="font-size:0.82rem;color:var(--text-muted);">${verse.explanation.slice(0, 90)}…</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0;">
+            <a href="chapter.html?ch=${chapter.id}&v=${verse.num}" style="font-size:0.78rem;color:var(--gold);">Read →</a>
+            <button onclick="removeBookmark(event,'${id}')" style="font-size:0.72rem;color:var(--text-muted);background:none;border:none;cursor:pointer;" onmouseover="this.style.color='var(--crimson)'" onmouseout="this.style.color='var(--text-muted)'">Remove</button>
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function removeBookmark(e, id) {
+  e.stopPropagation();
+  const saved = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+  const idx   = saved.indexOf(id);
+  if (idx > -1) saved.splice(idx, 1);
+  localStorage.setItem('bookmarks', JSON.stringify(saved));
+  loadBookmarks();
+  loadStats();
+  showToast('Bookmark removed');
+}
+
+function saveNote() {
+  const title = document.getElementById('note-title').value.trim();
+  const body  = document.getElementById('note-body').value.trim();
+  if (!body) { showToast('Please write something first'); return; }
+
+  const notes = JSON.parse(localStorage.getItem('gita-notes') || '[]');
+  notes.unshift({ id: Date.now(), title: title || 'Reflection', body, date: new Date().toISOString() });
+  localStorage.setItem('gita-notes', JSON.stringify(notes));
+
+  document.getElementById('note-title').value = '';
+  document.getElementById('note-body').value  = '';
+  loadNotes();
+  loadStats();
+  showToast('✍️ Reflection saved');
+}
+
+function loadNotes() {
+  const notes     = JSON.parse(localStorage.getItem('gita-notes') || '[]');
+  const container = document.getElementById('notes-container');
+  if (!container) return;
+  if (!notes.length) return;
+
+  container.innerHTML = notes.map(n => `
+    <div class="reflection-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:16px;">
+        <div>
+          <div style="font-family:var(--font-display);font-size:1.1rem;color:var(--text-primary);margin-bottom:4px;">${n.title}</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);">${new Date(n.date).toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'})}</div>
+        </div>
+        <button onclick="deleteNote(${n.id})" style="font-size:0.75rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:var(--radius-full);padding:4px 12px;cursor:pointer;flex-shrink:0;" onmouseover="this.style.color='var(--crimson)'" onmouseout="this.style.color='var(--text-muted)'">Delete</button>
+      </div>
+      <div style="font-size:0.93rem;color:var(--text-secondary);line-height:1.8;white-space:pre-wrap;">${n.body}</div>
+    </div>`).join('');
+}
+
+function deleteNote(id) {
+  if (!confirm('Delete this reflection?')) return;
+  const notes = JSON.parse(localStorage.getItem('gita-notes') || '[]').filter(n => n.id !== id);
+  localStorage.setItem('gita-notes', JSON.stringify(notes));
+  loadNotes();
+  loadStats();
+  showToast('Note deleted');
+}
+
+function loadProgress() {
+  const saved   = JSON.parse(localStorage.getItem('gita-progress') || '{}');
+  const count   = Object.keys(saved).length;
+  const pct     = Math.round((count / 18) * 100);
+  const bar     = document.getElementById('overall-bar');
+  const pctEl   = document.getElementById('progress-pct');
+  const list    = document.getElementById('progress-list');
+
+  if (bar)   bar.style.width = pct + '%';
+  if (pctEl) pctEl.textContent = pct + '%';
+
+  if (list) {
+    list.innerHTML = GITA_DATA.chapters.map(ch => {
+      const visited = !!saved[ch.id];
+      const dateStr = visited ? new Date(saved[ch.id]).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : '';
+      return `
+        <div class="progress-chapter-row">
+          <div class="progress-check ${visited ? 'done' : 'pending'}">${visited ? '✓' : ch.id}</div>
+          <div style="flex:1;">
+            <div style="font-size:0.9rem;color:${visited ? 'var(--text-primary)' : 'var(--text-muted)'};">Ch. ${ch.id}: ${ch.name}</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);">${ch.verseCount} verses · ${ch.theme}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            ${visited ? `<span style="font-size:0.75rem;color:var(--sage);">${dateStr}</span>` : ''}
+            <a href="chapter.html?ch=${ch.id}" style="font-size:0.78rem;color:var(--gold);">${visited ? 'Re-read' : 'Read'} →</a>
+          </div>
+        </div>`;
+    }).join('');
+  }
+}
+
+function resetProgress() {
+  if (!confirm('Reset all reading progress? (Bookmarks and notes will be kept)')) return;
+  localStorage.removeItem('gita-progress');
+  localStorage.removeItem('gita-wisdom-visits');
+  loadProgress();
+  loadStats();
+  showToast('Progress reset');
+}
+</script>
+<script>
+// Service worker removed — actively unregister any previously installed one and clear old caches
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+}
+if (window.caches && caches.keys) {
+  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+}
+</script>
+</body>
+</html>
