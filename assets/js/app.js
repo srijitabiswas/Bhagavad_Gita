@@ -125,6 +125,20 @@ function initNav() {
   if (hbg && mob) {
     hbg.addEventListener('click', () => mob.classList.toggle('open'));
     mob.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mob.classList.remove('open')));
+
+    // The top bar's contextual CTA (e.g. "Begin Journey", "Start Reading")
+    // is hidden on narrow screens to prevent overlap with the logo and
+    // hamburger. Carry it into the slide-out menu instead, so the action
+    // stays available rather than disappearing.
+    const navCta = document.querySelector('.nav-actions .btn-nav');
+    if (navCta && !mob.querySelector('.mobile-nav-cta')) {
+      const cta = document.createElement('a');
+      cta.href = navCta.getAttribute('href');
+      cta.textContent = navCta.textContent;
+      cta.className = 'mobile-nav-cta';
+      cta.addEventListener('click', () => mob.classList.remove('open'));
+      mob.insertBefore(cta, mob.firstChild);
+    }
   }
   const cur = location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-links a').forEach(a => {
