@@ -198,6 +198,35 @@ function initPageTransitions() {
     });
   });
 
+  // Belt-and-suspenders: also reset right before the browser captures
+  // this page into bfcache (pagehide fires just before that snapshot
+  // is taken), so the cached version is never frozen mid-transition
+  // in the first place.
+  window.addEventListener('pagehide', () => {
+    overlay.style.transition = 'none';
+    overlay.style.opacity = '0';
+    overlay.style.pointerEvents = 'none';
+  });
+
+  // Reset the overlay when the page is restored from the browser's
+  // back/forward cache (bfcache). Without this, pressing the Back
+  // button can restore a snapshot taken mid-transition — overlay
+  // fully opaque and blocking clicks — leaving the page looking
+  // black and frozen until a manual reload.
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted) return; // fresh load — let the normal fade-in run
+    overlay.style.transition = 'none';
+    overlay.style.opacity = '0';
+    overlay.style.pointerEvents = 'none';
+    document.body.style.transition = 'none';
+    document.body.style.opacity = '1';
+    // Restore the smooth transition for any future in-page changes
+    requestAnimationFrame(() => {
+      overlay.style.transition = 'opacity 0.4s ease';
+      document.body.style.transition = 'opacity 0.5s ease';
+    });
+  });
+
   // Intercept internal links
   document.addEventListener('click', e => {
     const a = e.target.closest('a');
