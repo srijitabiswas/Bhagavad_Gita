@@ -148,17 +148,6 @@ The interface is designed to create a calm and immersive reading experience thro
 
 ---
 
-## 🚀 Getting Started
-
-```bash
-git clone https://github.com/your-username/bhagavad-gita.git
-
-cd bhagavad-gita
-
-npm install
-
-npm start
-```
 
 ---
 
